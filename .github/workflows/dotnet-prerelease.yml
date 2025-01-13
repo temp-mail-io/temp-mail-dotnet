@@ -27,7 +27,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore /p:VersionPrefix=$(cat version)  /p:VersionSuffix=rc
+      run: dotnet build --no-restore /p:VersionPrefix=$(cat version.xml)  /p:VersionSuffix=rc
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish TempMail.Client NuGet Package
