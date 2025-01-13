@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <LangVersion>13</LangVersion>
+        <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>TempMail.Client</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>Viacheslav Koryagin</Authors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    </ItemGroup>
+
+</Project>
