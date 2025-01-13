@@ -21,11 +21,10 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Version Bump
-      uses: joneja09/gh-action-dotnet-bump@1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: SiqiLu/dotnet-bump-version@2.0.0
       with:
-        default: prerelease
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        version_mask: 0.0.1.1
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
