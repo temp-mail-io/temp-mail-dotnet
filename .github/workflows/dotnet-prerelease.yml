@@ -30,14 +30,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish TempMail.Client NuGet Package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: ./src/TempMail.Client/TempMail.Client.csproj
-        NUGET_KEY: ${{secrets.NUGET_ORG_API_KEY}}
-        INCLUDE_SYMBOLS: true
+      run: dotnet nuget push ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg -k ${{secrets.NUGET_ORG_API_KEY}} -s https://api.nuget.org/v3/index.json
     - name: Publish TempMail.Client.AspNetCore NuGet Package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: ./src/TempMail.Client.AspNetCore/TempMail.Client.AspNetCore.csproj
-        NUGET_KEY: ${{secrets.NUGET_ORG_API_KEY}}
-        INCLUDE_SYMBOLS: true
+      run: dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Debug/TempMail.Client.AspNetCore.*.nupkg -k ${{secrets.NUGET_ORG_API_KEY}} -s https://api.nuget.org/v3/index.json
