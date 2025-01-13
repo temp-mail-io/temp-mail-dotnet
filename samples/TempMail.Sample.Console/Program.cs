@@ -4,10 +4,10 @@ using TempMail.Client;
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 
-ITempMailClient client = TempMailClient
-    .Create(TempMailClientConfigurationBuilder
+using var client = TempMailClient.Create(
+    TempMailClientConfigurationBuilder
         .Create()
-        .WithApiKey(/*paste your API-Key here*/ null)
+        .WithApiKey( /*paste your API-Key here*/ null)
         .Build());
         
 var domainsResponse = await client.GetAvailableDomains();
@@ -47,6 +47,3 @@ Console.WriteLine("Limit: {0}; Used: {1}; Remaining: {2}; Reset date-time: {3}",
     rateLimitStatus.Used,
     rateLimitStatus.Remaining,
     rateLimitStatus.ResetDateTime);
-    
-    
-client.Dispose();

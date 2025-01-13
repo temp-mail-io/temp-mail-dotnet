@@ -4,6 +4,9 @@ namespace TempMail.Client.AspNetCore;
 
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// Register <see cref="TempMailClient"/>
+    /// </summary>
     public static IServiceCollection AddTempMailClient(
         this IServiceCollection services,
         string? apiKey = default)
@@ -24,6 +27,10 @@ public static class ServiceCollectionExtensions
         
         return services;
     }
+    
+    /// <summary>
+    /// Register <see cref="TempMailClient"/>
+    /// </summary>
     public static IServiceCollection AddTempMailClient(
         this IServiceCollection services,
         TempMailClientConfiguration config)
