@@ -4,8 +4,8 @@
 name: .NET PreRelease
 
 on:
-  pull_request:
-    branches: [ "master" ]
+  push:
+    branches: [ "feature/**" ]
 
 jobs:
   build:
@@ -30,6 +30,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish NuGet
-      run: "dotnet pack . --version-suffix rc && \ 
+      run: "dotnet build . && \
+            dotnet pack . --version-suffix rc && \ 
             dotnet nuget push ./src/TempMail.Client/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json && \
             dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json"
