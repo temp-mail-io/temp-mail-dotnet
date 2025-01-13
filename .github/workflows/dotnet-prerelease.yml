@@ -24,10 +24,14 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         version_mask: 0.0.0.1
         version_files: "version.xml"
+    - name: Set Version Env Var
+      run: |
+        LIBRARY_VERSION=$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')
+        LIBRARY_TAG=v$LIBRARY_VERSION-rc
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore /p:VersionPrefix=$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')  /p:VersionSuffix=rc
+      run: dotnet build --no-restore /p:VersionPrefix=$LIBRARY_VERSION  /p:VersionSuffix=rc
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish TempMail.Client NuGet Package
@@ -38,4 +42,4 @@ jobs:
       uses: IIlyichev/github-tag-action@v6.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: "v$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\\([^<]*\\)<.*/\\1/;p;q}')-rc"
+        custom_tag: ${{ env.LIBRARY_TAG }}
