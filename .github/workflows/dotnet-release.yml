@@ -27,6 +27,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: Publish NuGet
-        run: "dotnet pack . && \ 
+        run: "dotnet build . && \
+            dotnet pack . && \ 
             dotnet nuget push ./src/TempMail.Client/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json && \
             dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json"
