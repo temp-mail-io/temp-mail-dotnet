@@ -38,4 +38,4 @@ jobs:
       uses: IIlyichev/github-tag-action@v6.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: "v$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')-rc"
+        custom_tag: "v$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\\([^<]*\\)<.*/\\1/;p;q}')-rc"
