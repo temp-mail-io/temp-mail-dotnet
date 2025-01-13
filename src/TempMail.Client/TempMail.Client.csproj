@@ -4,10 +4,18 @@
         <Nullable>enable</Nullable>
         <LangVersion>13</LangVersion>
         <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <PackageId>TempMail.Client</PackageId>
-        <Version>0.0.1</Version>
+        <Description>A light-weight client for https://temp-mail.io</Description>
+        <Version>0.0.2</Version>
         <Authors>Viacheslav Koryagin</Authors>
+        <RepositoryUrl>https://github.com/temp-mail-io/temp-mail-dotnet</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 
     <ItemGroup>
