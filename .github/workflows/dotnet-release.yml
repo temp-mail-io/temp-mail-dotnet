@@ -1,0 +1,45 @@
+﻿name: .NET Release
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Version Bump
+        uses: SiqiLu/dotnet-bump-version@2.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version_mask: 0.0.1.0
+          version_files: "version.xml"
+      - name: Set Version Env Var
+        run: |
+          LIBRARY_VERSION=$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')
+          LIBRARY_TAG=v$LIBRARY_VERSION
+          echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
+          echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }}
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Publish TempMail.Client NuGet Package
+        run: dotnet nuget push ./src/TempMail.Client/bin/Release/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish TempMail.Client.AspNetCore NuGet Package
+        run: dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Release/TempMail.Client.AspNetCore.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: GitHub Tag
+        uses: IIlyichev/github-tag-action@v6.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ env.LIBRARY_TAG }}
+          tag_prefix: ""
