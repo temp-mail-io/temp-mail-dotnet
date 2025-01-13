@@ -1,11 +1,9 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: .NET PreRelease
 
 on:
-  push:
-    branches: [ "master", "feature/**" ]
   pull_request:
     branches: [ "master" ]
 
@@ -24,10 +22,14 @@ jobs:
       uses: SiqiLu/dotnet-bump-version@2.0.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        version_mask: 0.0.1.1
+        version_mask: 0.0.0.1
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Publish NuGet
+      run: "dotnet pack . --version-suffix rc && \ 
+            dotnet nuget push ./src/TempMail.Client/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json && \
+            dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json"

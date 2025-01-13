@@ -1,0 +1,32 @@
+﻿name: .NET Release
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Version Bump
+        uses: SiqiLu/dotnet-bump-version@2.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          version_mask: 0.0.1.0
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Publish NuGet
+        run: "dotnet pack . && \ 
+            dotnet nuget push ./src/TempMail.Client/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json && \
+            dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Release/*.nupkg --api-key ${{secrets.NUGET_ORG_API_KEY}} --source https://api.nuget.org/v3/index.json"
