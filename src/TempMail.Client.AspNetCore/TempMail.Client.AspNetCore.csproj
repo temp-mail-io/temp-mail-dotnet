@@ -10,7 +10,7 @@
     <PropertyGroup>
         <PackageId>TempMail.Client.AspNetCore</PackageId>
         <Description>A light-weight client for https://temp-mail.io</Description>
-        <Version>0.0.3.4</Version>
+        <VersionPrefix>0.0.3.4</VersionPrefix>
         <Authors>Viacheslav Koryagin</Authors>
         <RepositoryUrl>https://github.com/temp-mail-io/temp-mail-dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
