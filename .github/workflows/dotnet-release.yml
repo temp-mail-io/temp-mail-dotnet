@@ -30,7 +30,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }}
+        run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }} -c Release
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: Publish TempMail.Client NuGet Package
