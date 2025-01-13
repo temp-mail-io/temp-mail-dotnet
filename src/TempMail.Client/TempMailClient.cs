@@ -12,6 +12,9 @@ using TempMail.Client.Responses;
 
 namespace TempMail.Client;
 
+/// <summary>
+/// <inheritdoc cref="ITempMailClient"/>
+/// </summary>
 public class TempMailClient : ITempMailClient
 {
     private readonly HttpClient _httpClient;
@@ -28,24 +31,41 @@ public class TempMailClient : ITempMailClient
         
     private TempMailClient(
         TempMailClientConfiguration config,
-        bool disposeHttpClient,
-        HttpClient? httpClient = default)
+        HttpClient httpClient,
+        bool disposeHttpClient)
     {
+        _httpClient = httpClient;
         _disposeHttpClient = disposeHttpClient;
-        _httpClient = httpClient ?? new HttpClient();
         _httpClient.BaseAddress = new Uri(config.ApiUrl);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         _httpClient.DefaultRequestHeaders.Add("X-API-Key", config.ApiKey);
         _httpClient.DefaultRequestHeaders.Add("User-Agent", $".NET temp-mail.io client (Library version: {config.ClientVersion}; .NET Runtime: {config.DotnetRuntimeVersion}; OS: {config.OsVersion})");
     }
 
-    public static TempMailClient Create(TempMailClientConfiguration config) => new(config, true);
+    /// <summary>
+    /// Create a <see cref="TempMailClient"/>. This will create an <see cref="HttpClient"/> internally.
+    /// </summary>
+    /// <param name="config"><see cref="TempMailClientConfiguration"/></param>
+    /// <returns><see cref="TempMailClient"/></returns>
+    public static TempMailClient Create(TempMailClientConfiguration config) => 
+        Create(config, new HttpClient(), true);
 
+    /// <summary>
+    /// Create a <see cref="TempMailClient"/> using existing <see cref="HttpClient"/>
+    /// </summary>
+    /// <param name="config"><see cref="TempMailClientConfiguration"/></param>
+    /// <param name="httpClient">An existing <see cref="HttpClient"/> to be used by this instance of <see cref="TempMailClient"/></param>
+    /// <param name="disposeHttpClient">Tells whether to dispose of the specified <paramref name="httpClient"/>, <c>false</c> by default</param>
+    /// <returns><see cref="TempMailClient"/></returns>
+    /// <remarks>
+    /// This method is useful in combination with ASP .NET <c>IHttpClientFactory</c>.
+    /// For other scenarios the <paramref name="disposeHttpClient"/> parameter was added.
+    /// </remarks>
     public static TempMailClient Create(
         TempMailClientConfiguration config,
         HttpClient httpClient,
         bool disposeHttpClient = false) =>
-        new(config, disposeHttpClient, httpClient);
+        new(config, httpClient, disposeHttpClient);
 
     private async Task<Response<TResponse>> SendHttpRequest<TResponse>(HttpRequestMessage msg, CancellationToken ct)
     {
@@ -146,10 +166,10 @@ public class TempMailClient : ITempMailClient
         CancellationToken ct = default) =>
         SendRequestNoContent<EmptyResponse>($"/v1/messages/{request.Id}", HttpMethod.Delete, ct);
 
-    public Task<Response<Message>> GetMessageSourceCode(
+    public Task<Response<string>> GetMessageSourceCode(
         GetMessageSourceCodeRequest request,
         CancellationToken ct = default) =>
-        SendRequestNoContent<Message>($"/v1/messages/{request.Id}/source_code", HttpMethod.Get, ct);
+        SendRequestNoContent<string>($"/v1/messages/{request.Id}/source_code", HttpMethod.Get, ct);
 
     public Task<Response<string>> GetAttachment(
         GetAttachmentRequest request,

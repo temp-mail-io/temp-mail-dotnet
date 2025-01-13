@@ -6,11 +6,11 @@ namespace TempMail.Client;
 
 public class Helpers
 {
-    public static readonly Regex EmailRegex = new (
+    public static readonly Regex EmailRegex = new(
         @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*@((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))\z",
         RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-        
-    public static readonly Regex DomainRegex = new (
+
+    public static readonly Regex DomainRegex = new(
         @"^((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))\z",
         RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 

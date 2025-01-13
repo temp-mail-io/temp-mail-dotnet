@@ -2,9 +2,11 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("TempMail.Sample.Console")]
 namespace TempMail.Client;
 
+/// <summary>
+/// <see cref="TempMailClientConfiguration"/> builder
+/// </summary>
 public class TempMailClientConfigurationBuilder
 {
     private TempMailClientConfigurationBuilder() { }
@@ -20,21 +22,41 @@ public class TempMailClientConfigurationBuilder
         return new TempMailClientConfigurationBuilder(new TempMailClientConfiguration());
     }
 
+    /// <summary>
+    /// Specify API-key
+    /// </summary>
     public TempMailClientConfigurationBuilder WithApiKey(string? apiKey) => 
         new(_configuration with { ApiKey = apiKey! });
 
-    internal TempMailClientConfigurationBuilder WithApiUrl(string apiUrl) => 
+    /// <summary>
+    /// Specify API URL, useful for testing
+    /// </summary>
+    public TempMailClientConfigurationBuilder WithApiUrl(string apiUrl) => 
         new(_configuration with { ApiUrl = apiUrl });
 
+    /// <summary>
+    /// Specify the OS version, can be used for tests
+    /// </summary>
     public TempMailClientConfigurationBuilder WithOsVersion(string osVersion) => 
         new(_configuration with { OsVersion = osVersion });
 
+    /// <summary>
+    /// Specify the .NET Runtime, can be used for tests
+    /// </summary>
     public TempMailClientConfigurationBuilder WithDotnetRuntimeVersion(string dotnetRuntimeVersion) => 
         new(_configuration with { DotnetRuntimeVersion = dotnetRuntimeVersion });
 
+    /// <summary>
+    /// Specify the <c>TempMail.Client</c> library version, can be used for tests
+    /// </summary>
     public TempMailClientConfigurationBuilder WithClientVersion(string clientVersion) => 
         new(_configuration with { ClientVersion = clientVersion });
 
+    /// <summary>
+    /// Build configuration
+    /// </summary>
+    /// <returns><see cref="TempMailClientConfiguration"/></returns>
+    /// <exception cref="ArgumentException">Thrown if the <see cref="TempMailClientConfiguration.ApiKey"/> is not specified</exception>
     public TempMailClientConfiguration Build()
     {
         
