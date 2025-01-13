@@ -34,3 +34,8 @@ jobs:
       run: dotnet nuget push ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
     - name: Publish TempMail.Client.AspNetCore NuGet Package
       run: dotnet nuget push ./src/TempMail.Client.AspNetCore/bin/Debug/TempMail.Client.AspNetCore.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+    - name: GitHub Tag 
+      uses: IIlyichev/github-tag-action@v6.3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        custom_tag: "v$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')-rc"
