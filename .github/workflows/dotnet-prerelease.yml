@@ -23,7 +23,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         version_mask: 0.0.0.1
-        version_file: version
+        version_files: "version"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
