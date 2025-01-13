@@ -28,6 +28,8 @@ jobs:
       run: |
         LIBRARY_VERSION=$(cat version.xml | sed -n '/Version/{s/<Version[^<]*>\([^<]*\)<.*/\1/;p;q}')
         LIBRARY_TAG=v$LIBRARY_VERSION-rc
+        echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
+        echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
