@@ -15,7 +15,7 @@ public class TempMailClientConfigurationBuilder
     {
         _configuration = config;
     }
-    private readonly TempMailClientConfiguration _configuration;
+    private readonly TempMailClientConfiguration _configuration = null!;
 
     public static TempMailClientConfigurationBuilder Create()
     {
