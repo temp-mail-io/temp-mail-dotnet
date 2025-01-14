@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-namespace TempMail.Client.Tests;
+namespace TempMail.Client.Tests.Util;
 
 [AttributeUsage(AttributeTargets.Method)]
 internal class HandlerAttribute(

@@ -86,6 +86,11 @@ public class TempMailClient : ITempMailClient
                     JsonOptions,
                     ct)
                 .ConfigureAwait(false);
+
+            if (errorResponseContent?.Error is null)
+            {
+                throw new NotImplementedException("TODO: create custom exception");
+            }
             
             return Response.Error<TResponse>(errorResponseContent);
         }

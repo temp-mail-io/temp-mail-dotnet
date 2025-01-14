@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 
-namespace TempMail.Client.Tests;
+namespace TempMail.Client.Tests.Util;
 
 internal class CreateEmailRequestJsonConverter : JsonConverter<CreateEmailRequest>
 {
