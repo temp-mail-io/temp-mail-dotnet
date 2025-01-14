@@ -23,6 +23,7 @@ public class TempMailClient : ITempMailClient
     private static readonly JsonSerializerOptions JsonOptions = new ()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         Converters =
         {
             new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
