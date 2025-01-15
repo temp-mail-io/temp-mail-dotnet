@@ -72,7 +72,7 @@ jobs:
         "https://api.github.com/gists/89c85cdd66cced45519b7928f2740687" \
         -d "$data"
     - name: Publish NuGet Packages
-      run:
+      run: |
         mkdir ./package
         cp ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg ./package
         cp ./src/TempMail.Client.AspNetCore/bin/Debug/TempMail.Client.AspNetCore.*.nupkg ./package
