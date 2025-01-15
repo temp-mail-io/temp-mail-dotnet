@@ -35,7 +35,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }}  /p:VersionSuffix=rc
     - name: Test
-      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings --results-directory ./coverage
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage
     - name: Code Coverage Summary
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
