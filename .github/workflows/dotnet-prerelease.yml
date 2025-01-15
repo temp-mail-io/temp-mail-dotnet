@@ -85,7 +85,7 @@ jobs:
           tag_prefix: ""
       - name: GitHub Release
         run: |
-          apt install gh -y
+          sudo apt install gh -y
           
           dotnet pwsh -c "
             $release = gh api `
