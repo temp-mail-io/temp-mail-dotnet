@@ -35,7 +35,19 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }}  /p:VersionSuffix=rc
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings --results-directory ./coverage
+    - name: Code Coverage Summary
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '60 80'
     - name: Publish TempMail.Client NuGet Package
       run: dotnet nuget push ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
     - name: Publish TempMail.Client.AspNetCore NuGet Package
