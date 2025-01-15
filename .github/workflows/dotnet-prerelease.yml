@@ -88,11 +88,11 @@ jobs:
           sudo apt install gh -y
           
           dotnet pwsh -c "
-            \$release = curl -L --method POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases -d '{ \"tag_name\":\"${{ env.LIBRARY_TAG }}\", \"name\":\"${{ env.LIBRARY_TAG }}\", \"draft\":true, \"prerelease\"true, \"generate_release_notes\":true}' | ConvertFrom-Json;
+            \$release = curl -L --method POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases -d '{ \"tag_name\":\"${{ env.LIBRARY_TAG }}\", \"name\":\"${{ env.LIBRARY_TAG }}\", \"draft\":true, \"prerelease\"true, \"generate_release_notes\":true}' | ConvertFrom-Json;
             
-            Get-ChildItem ./packages | ForEach-Object { curl -L --method POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \"https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases/\$(\$release.id)/assets?name=\$(\$_.Name)\" --data-binary \"@\$(\$_.FullName)\";
+            Get-ChildItem ./packages | ForEach-Object { curl -L --method POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \"https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases/\$(\$release.id)/assets?name=\$(\$_.Name)\" --data-binary \"@\$(\$_.FullName)\";
             
-            curl -L --method PATCH -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' \"https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases/\$(\$release.id)\" '{\"draft\":false}'
+            curl -L --method PATCH -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \"https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases/\$(\$release.id)\" '{\"draft\":false}'
           "          
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
