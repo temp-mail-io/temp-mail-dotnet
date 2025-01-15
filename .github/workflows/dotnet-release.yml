@@ -24,7 +24,7 @@ jobs:
         uses: SiqiLu/dotnet-bump-version@2.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          version_mask: 0.0.0.1
+          version_mask: 0.0.1.0
           version_files: "version.xml"
       - name: Set Version Env Var
         run: |
