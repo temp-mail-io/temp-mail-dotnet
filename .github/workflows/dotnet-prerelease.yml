@@ -50,12 +50,14 @@ jobs:
             ) * 100;
           @{ 
             files = @{ 
-              "temp-mail-dotnet-code-coverage.json" = $(@{
-                schemaVersion = 1;
-                label = "Code Coverage";
-                message = $lr.ToString();
-                color = (&{if ($lr -ge 90) {"green"} else { if ($lr -gt 60) {"yellow"} else {"orange"} } })
-              } | ConvertTo-Json) 
+              "temp-mail-dotnet-code-coverage.json" = @{
+                content = $(@{
+                  schemaVersion = 1;
+                  label = "Code Coverage";
+                  message = $lr.ToString();
+                  color = (&{if ($lr -ge 90) {"green"} else { if ($lr -gt 60) {"yellow"} else {"orange"} } })
+                } | ConvertTo-Json)
+              }
             } 
           } | ConvertTo-Json' > code-coverage-badge.json
     - name: Create Awesome Badge
