@@ -15,8 +15,8 @@ jobs:
     steps:
     - name: Ensure Packages
       run: |
-        apt update
-        apt install jq
+        sudo apt update
+        sudo apt install jq
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
