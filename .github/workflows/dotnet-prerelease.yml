@@ -106,7 +106,7 @@ jobs:
                 -H 'Accept: application/vnd.github+json' `
                 -H 'X-GitHub-Api-Version: 2022-11-28' `
                 \"/repos/temp-mail-io/temp-mail-dotnet/releases/$($release.id)/assets?name=$($_.Name)\"
-                -f \"@$($_.FullName)\"
+                -f \"@$($_.FullName)\";
             
             gh api `
               --method PATCH `
