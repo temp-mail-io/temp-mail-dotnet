@@ -28,7 +28,7 @@ jobs:
         version_files: "version.xml"
     - name: Set Version Env Var
       run: |
-        LIBRARY_VERSION=$(dotnet pwsh -c "(Select-Xml -Path D:\repos\dotnet\TempMail.Client\version.xml -XPath '/Version' | Select-Object -ExpandProperty Node).InnerText")
+        LIBRARY_VERSION=$(dotnet pwsh -c "(Select-Xml -Path ./version.xml -XPath '/Version' | Select-Object -ExpandProperty Node).InnerText")
         LIBRARY_TAG=v$LIBRARY_VERSION-rc
         echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
         echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
