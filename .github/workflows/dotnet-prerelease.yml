@@ -87,7 +87,7 @@ jobs:
         run: |
           release=$(curl -L -X POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases -d '{ "tag_name":"${{ env.LIBRARY_TAG }}", "name":"${{ env.LIBRARY_TAG }}", "draft":true, "prerelease":true, "generate_release_notes":true }' | jq -r '.id')
           cd ./package
-          for file in find -type f ./
+          for file in `find -type f ./`
           do
             curl -L -X POST -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases/$release/assets?name=$file" --data-binary "@$file"
           done
