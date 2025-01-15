@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -112,6 +113,16 @@ public class TempMailClient : ITempMailClient
         await using var responseContentStream = await response.Content
             .ReadAsStreamAsync()
             .ConfigureAwait(false);
+
+        if (typeof(TResponse) == typeof(byte[]))
+        {
+            var bytes = new byte[responseContentStream.Length];
+            using var ms = new MemoryStream(bytes);
+            await responseContentStream.CopyToAsync(ms, ct)
+                .ConfigureAwait(false);
+            
+            return Unsafe.As<Response<TResponse>>(Response.Success(bytes));
+        }
         
         var responseContent = await JsonSerializer
             .DeserializeAsync<TResponse>(
@@ -177,10 +188,10 @@ public class TempMailClient : ITempMailClient
         CancellationToken ct = default) =>
         SendRequestNoContent<string>($"/v1/messages/{request.Id}/source_code", HttpMethod.Get, ct);
 
-    public Task<Response<string>> GetAttachment(
+    public Task<Response<byte[]>> GetAttachment(
         GetAttachmentRequest request,
         CancellationToken ct = default) =>
-        SendRequestNoContent<string>($"/v1/attachments/{request.Id}", HttpMethod.Get, ct);
+        SendRequestNoContent<byte[]>($"/v1/attachments/{request.Id}", HttpMethod.Get, ct);
 
     public Task<Response<GetAvailableDomainsResponse>> GetAvailableDomains(
         CancellationToken ct = default) =>

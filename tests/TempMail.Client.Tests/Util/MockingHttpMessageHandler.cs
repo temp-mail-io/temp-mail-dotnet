@@ -61,7 +61,7 @@ internal class MockingHttpMessageHandler : HttpMessageHandler
         throw new Exception($"No handler found for {request.RequestUri}");
     }
 
-    [Handler(".*/v1/emails", "POST")]
+    [Handler("^.*/v1/emails$", "POST")]
     private async Task<HttpResponseMessage> HandleCreateEmail(HttpRequestMessage request)
     {
         var requestBody = JsonSerializer.Deserialize<CreateEmailRequest>(
@@ -89,8 +89,8 @@ internal class MockingHttpMessageHandler : HttpMessageHandler
         return httpResponseMessage;
     }
 
-    [Handler(@".*/v1/emails/(.*)/messages", "GET")]
-    private async Task<HttpResponseMessage> HandleGetAllMessage(HttpRequestMessage _, string email)
+    [Handler(@"^.*/v1/emails/(.*)/messages$", "GET")]
+    private Task<HttpResponseMessage> HandleGetAllMessage(HttpRequestMessage _, string email)
     {
         var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
         
@@ -100,36 +100,135 @@ internal class MockingHttpMessageHandler : HttpMessageHandler
         {
             httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
             httpResponseMessage.Content = messages.Content;
-            return httpResponseMessage;
+            return Task.FromResult(httpResponseMessage);
         }
 
         var resp = new GetAllMessagesResponse(messages.Result);
         
         httpResponseMessage.Content = new StringContent(JsonSerializer.Serialize(resp, JsonOptions));
         
-        return httpResponseMessage;
+        return Task.FromResult(httpResponseMessage);
     }
 
-    [Handler(@".*/v1/emails/(.*)", "DELETE")]
-    private async Task<HttpResponseMessage> HandleDeleteEmail(HttpRequestMessage _, string email)
+    [Handler("^.*/v1/emails/(.*)$", "DELETE")]
+    private Task<HttpResponseMessage> HandleDeleteEmail(HttpRequestMessage _, string email)
     {
         var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
 
-        var isSuccess = TryMakeRequest(() =>
-            {
-                _mailboxManager.DeleteEmail(email);
-                return string.Empty;
-            },
-            out var content);
+        var isSuccess = TryMakeRequest(() => _mailboxManager.DeleteEmail(email), out var content);
         
         if (!isSuccess)
         {
             httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
-            httpResponseMessage.Content = content.Content;
-            return httpResponseMessage;
+            httpResponseMessage.Content = content;
+            return Task.FromResult(httpResponseMessage);
         }
         
-        return httpResponseMessage;
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/messages/(.*)$", "GET")]
+    private Task<HttpResponseMessage> HandleGetSpecificMessage(HttpRequestMessage _, string messageId)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        
+        var isSuccess = TryMakeRequest(() => _mailboxManager.GetSpecificMessage(messageId), out var message);
+
+        if (!isSuccess)
+        {
+            httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
+            httpResponseMessage.Content = message.Content;
+            return Task.FromResult(httpResponseMessage);
+        }
+        
+        httpResponseMessage.Content = new StringContent(JsonSerializer.Serialize(message.Result, JsonOptions));
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/messages/(.*)$", "DELETE")]
+    private Task<HttpResponseMessage> HandleDeleteSpecificMessage(HttpRequestMessage _, string messageId)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        
+        var isSuccess = TryMakeRequest(() => _mailboxManager.DeleteSpecificMessage(messageId), out var content);
+
+        if (!isSuccess)
+        {
+            httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
+            httpResponseMessage.Content = content;
+            return Task.FromResult(httpResponseMessage);
+        }
+        
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/messages/(.*)/source_code$", "GET")]
+    private Task<HttpResponseMessage> HandleGetMessageSourceCode(HttpRequestMessage _, string messageId)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        
+        var isSuccess = TryMakeRequest(() => _mailboxManager.GetMessageSourceCode(messageId), out var content);
+
+        if (!isSuccess)
+        {
+            httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
+            httpResponseMessage.Content = content.Content;
+            return Task.FromResult(httpResponseMessage);
+        }
+        
+        httpResponseMessage.Content = new StringContent(content.Result);
+        
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/attachments/(.*)$", "GET")]
+    private Task<HttpResponseMessage> HandleGetAttachment(HttpRequestMessage _, string attachmentId)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        
+        var isSuccess = TryMakeRequest(() => _mailboxManager.GetAttachment(attachmentId), out var content);
+
+        if (!isSuccess)
+        {
+            httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
+            httpResponseMessage.Content = content.Content;
+            return Task.FromResult(httpResponseMessage);
+        }
+        
+        httpResponseMessage.Content = new StreamContent(new MemoryStream(content.Result));
+        
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/domains$", "GET")]
+    private Task<HttpResponseMessage> HandleGetAvailableDomains(HttpRequestMessage _)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        
+        var isSuccess = TryMakeRequest(() => _mailboxManager.GetAvailableDomains(), out var content);
+
+        if (!isSuccess)
+        {
+            httpResponseMessage.StatusCode = HttpStatusCode.BadRequest;
+            httpResponseMessage.Content = content.Content;
+            return Task.FromResult(httpResponseMessage);
+        }
+
+        var getAvailableDomainsResponse = new GetAvailableDomainsResponse(content.Result);
+        httpResponseMessage.Content = new StringContent(JsonSerializer.Serialize(getAvailableDomainsResponse, JsonOptions));
+        
+        return Task.FromResult(httpResponseMessage);
+    }
+
+    [Handler("^.*/v1/rate_limit$", "GET")]
+    private Task<HttpResponseMessage> HandleGetRateLimitStatus(HttpRequestMessage _)
+    {
+        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+        httpResponseMessage.Content = new StringContent(JsonSerializer.Serialize(
+            _mailboxManager.RateLimitStatus,
+            JsonOptions));
+        
+        return Task.FromResult(httpResponseMessage);
     }
 
     /// <summary>
@@ -152,6 +251,21 @@ internal class MockingHttpMessageHandler : HttpMessageHandler
             result = (new StringContent(JsonSerializer.Serialize(response, JsonOptions)), default)!;
             return false;
         }
+    }
+    
+    /// <summary>
+    /// sets <paramref name="result"/> only if the delegate has thrown
+    /// </summary>
+    private bool TryMakeRequest(Action f, out HttpContent content)
+    {
+        var isSuccess = TryMakeRequest(() =>
+        {
+            f();
+            return string.Empty;
+        }, out var result);
+        
+        content = result.Content;
+        return isSuccess;
     }
 
     private HttpResponseMessage ReturnError()

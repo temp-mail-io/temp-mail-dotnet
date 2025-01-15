@@ -13,15 +13,15 @@ public class GetAllMessagesTests
         
         PremiumEmail = await SetUp.Client.CreateEmail(CreateEmailRequest.ByDomainType(DomainType.Premium));
         
-        Assert.IsNotNull(PremiumEmail);
-        Assert.IsTrue(PremiumEmail.IsSuccess);
-        Assert.IsNotNull(PremiumEmail.Result);
+        Assert.That(PremiumEmail, Is.Not.Null);
+        Assert.That(PremiumEmail.IsSuccess, Is.True, () => PremiumEmail.ErrorResult.Error.Detail);
+        Assert.That(PremiumEmail.Result, Is.Not.Null);
         
         PublicEmail = await SetUp.Client.CreateEmail(CreateEmailRequest.ByDomainType(DomainType.Public));
         
-        Assert.IsNotNull(PublicEmail);
-        Assert.IsTrue(PublicEmail.IsSuccess);
-        Assert.IsNotNull(PublicEmail.Result);
+        Assert.That(PublicEmail, Is.Not.Null);
+        Assert.That(PublicEmail.IsSuccess, Is.True, () => PublicEmail.ErrorResult.Error.Detail);
+        Assert.That(PublicEmail.Result, Is.Not.Null);
     }
 
     private Response<CreateEmailResponse> PremiumEmail { get; set; }
@@ -43,8 +43,8 @@ public class GetAllMessagesTests
 
         var messages = await SetUp.Client.GetAllMessages(GetAllMessagesRequest.Create(PublicEmail.Result.Email));
         
-        Assert.IsTrue(messages.IsSuccess);
-        Assert.IsNotNull(messages.Result);
+        Assert.That(messages.IsSuccess, Is.True, () => messages.ErrorResult.Error.Detail);
+        Assert.That(messages.Result, Is.Not.Null);
         Assert.That(messages.Result.Messages.Length, Is.EqualTo(1));
     }
 
@@ -66,8 +66,8 @@ public class GetAllMessagesTests
 
         var messages = await SetUp.Client.GetAllMessages(GetAllMessagesRequest.Create(PublicEmail.Result.Email));
         
-        Assert.IsFalse(messages.IsSuccess);
-        Assert.IsNotNull(messages.ErrorResult);
+        Assert.That(messages.IsSuccess, Is.False);
+        Assert.That(messages.ErrorResult, Is.Not.Null);
         Assert.That(messages.ErrorResult.Error.Type, Is.EqualTo(ErrorType.ApiError));
     }
 }

@@ -15,9 +15,9 @@ public class DeleteEmailTests
         
         Email = await SetUp.Client.CreateEmail(CreateEmailRequest.ByDomainType(DomainType.Custom));
         
-        Assert.IsNotNull(Email);
-        Assert.IsTrue(Email.IsSuccess);
-        Assert.IsNotNull(Email.Result);
+        Assert.That(Email, Is.Not.Null);
+        Assert.That(Email.IsSuccess, Is.True, () => Email.ErrorResult.Error.Detail);
+        Assert.That(Email.Result, Is.Not.Null);
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class DeleteEmailTests
     {
         var deleted = await SetUp.Client.DeleteEmail(DeleteEmailRequest.Create(Email.Result!.Email));
         
-        Assert.That(deleted.IsSuccess, Is.True);
+        Assert.That(deleted.IsSuccess, Is.True, () => deleted.ErrorResult.Error.Detail);
         Assert.That(deleted.Result, Is.Not.Null);
     }
 
@@ -34,7 +34,7 @@ public class DeleteEmailTests
     {
         var deleted = await SetUp.Client.DeleteEmail(DeleteEmailRequest.Create(Email.Result!.Email));
         
-        Assert.That(deleted.IsSuccess, Is.True);
+        Assert.That(deleted.IsSuccess, Is.True, () => deleted.ErrorResult.Error.Detail);
         Assert.That(deleted.Result, Is.Not.Null);
         
         var messages = await SetUp.Client.GetAllMessages(GetAllMessagesRequest.Create(Email.Result!.Email));

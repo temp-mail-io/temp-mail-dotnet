@@ -71,14 +71,14 @@ public interface ITempMailClient : IDisposable
     Task<Response<string>> GetMessageSourceCode(
         GetMessageSourceCodeRequest request,
         CancellationToken ct = default);
-    
+
     /// <summary>
     /// Get attachment to the given e-mail message 
     /// </summary>
     /// <param name="request"><see cref="GetAttachmentRequest"/></param>
     /// <param name="ct"><see cref="CancellationToken"/></param>
-    /// <returns><see cref="Response{TSuccess}"/>, either successful <see cref="string"/> or <see cref="ErrorResponse"/></returns>
-    Task<Response<string>> GetAttachment(
+    /// <returns><see cref="Response{TSuccess}"/>, either successful <see cref="T:byte[]"/> or <see cref="ErrorResponse"/></returns>
+    Task<Response<byte[]>> GetAttachment(
         GetAttachmentRequest request,
         CancellationToken ct = default);
 
