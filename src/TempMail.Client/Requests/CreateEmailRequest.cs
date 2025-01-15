@@ -50,6 +50,20 @@ public abstract class CreateEmailRequest
         
         return new CreateEmailByDomainTypeRequest(domainType);
     }
+    /// <summary>
+    /// Email, only available if the request was created by email
+    /// </summary>
+    public string? Email => this is CreateEmailByEmailRequest request ? request.Email : null;
+    
+    /// <summary>
+    /// Domain, only available if the request was created by domain
+    /// </summary>
+    public string? Domain => this is CreateEmailByDomainRequest request ? request.Domain : null;
+    
+    /// <summary>
+    /// Domain type, only available if the request was created by domain type
+    /// </summary>
+    public DomainType? DomainType => this is CreateEmailByDomainTypeRequest request ? request.DomainType : null;
 }
 
 /// <summary>
@@ -66,7 +80,7 @@ public class CreateEmailByEmailRequest : CreateEmailRequest
     /// <summary>
     /// Specific e-mail address with which the box will be created
     /// </summary>
-    public string Email { get; }
+    public new string Email { get; }
 }
 
 /// <summary>
@@ -83,7 +97,7 @@ public class CreateEmailByDomainRequest : CreateEmailRequest
     /// <summary>
     /// Specific domain on which the box will be created
     /// </summary>
-    public string Domain { get; }
+    public new string Domain { get; }
 }
 
 /// <summary>
@@ -100,5 +114,5 @@ public class CreateEmailByDomainTypeRequest : CreateEmailRequest
     /// <summary>
     /// Specific <see cref="DomainType"/> of which the box will be created
     /// </summary>
-    public DomainType DomainType { get; }
+    public new DomainType DomainType { get; }
 }
