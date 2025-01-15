@@ -46,7 +46,7 @@ jobs:
       run: dotnet pwsh -c '$lr = [System.Math]::Round($(Select-Xml -Path ./coverage/*/coverage.cobertura.xml -XPath "//package" | Select-Object -ExpandProperty Node | Select-Object -Property line-rate)."line-rate", 2) * 100; @{schemaVersion = 1;label = "Code Coverage";message = $lr.ToString();color = (&{if ($lr -ge 90) {"green"} else { if ($lr -gt 60) {"yellow"} else {"orange"} } })} | ConvertTo-Json' > code-coverage-badge.json
     - name: Create Awesome Badge
       run: | 
-        data=$("{\"files\": { \"temp-mail-dotnet-code-coverage.json\": { \"content\": \"$(cat code-coverage-badge.json)\" } } }" | jq -Rsa .)
+        data=$(echo "{\"files\": { \"temp-mail-dotnet-code-coverage.json\": { \"content\": \"$(cat code-coverage-badge.json)\" } } }" | jq -Rsa .)
         echo "$data"
         code=`curl -L \
         -X PATCH \
