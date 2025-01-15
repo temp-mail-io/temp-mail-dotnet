@@ -49,8 +49,8 @@ jobs:
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer ${{ secrets.GH_GIST_API_KEY }}" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
-        https://api.github.com/gists/89c85cdd66cced45519b7928f2740687 \
-        -d $data
+        "https://api.github.com/gists/89c85cdd66cced45519b7928f2740687" \
+        -d "$data"
     - name: Publish TempMail.Client NuGet Package
       run: dotnet nuget push ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
     - name: Publish TempMail.Client.AspNetCore NuGet Package
