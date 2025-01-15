@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Ensure Packages
+      run: |
+        apt update
+        apt install jq
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -42,15 +46,15 @@ jobs:
       run: dotnet pwsh -c '$lr = [System.Math]::Round($(Select-Xml -Path ./coverage/*/coverage.cobertura.xml -XPath "//package" | Select-Object -ExpandProperty Node | Select-Object -Property line-rate)."line-rate", 2) * 100; @{schemaVersion = 1;label = "Code Coverage";message = $lr.ToString();color = (&{if ($lr -ge 90) {"green"} else { if ($lr -gt 60) {"yellow"} else {"orange"} } })} | ConvertTo-Json' > code-coverage-badge.json
     - name: Create Awesome Badge
       run: | 
-        data=$(cat code-coverage-badge.json)
-        echo "{\"files\": { \"temp-mail-dotnet-code-coverage.json\": { \"content\": \"$data\" } } }"
+        data={\"files\": { \"temp-mail-dotnet-code-coverage.json\": { \"content\": \"$(cat code-coverage-badge.json | jq -Rsa .)\" } } }
+        echo $data
         code=`curl -L \
         -X PATCH \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer ${{ secrets.GH_GIST_API_KEY }}" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         "https://api.github.com/gists/89c85cdd66cced45519b7928f2740687" \
-        -d "{\"files\": { \"temp-mail-dotnet-code-coverage.json\": { \"content\": \"$data\" } } }"`
+        -d "$data"`
         if [ $code != 200 ]
         then
           echo "FAILURE"
