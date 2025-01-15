@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }} -c Release
       - name: Test
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage -c Release
       - name: Code Coverage Summary
         run: |
           dotnet pwsh -c \
