@@ -89,3 +89,5 @@ jobs:
           title: ${{ env.LIBRARY_TAG }}
           tag: ${{ env.LIBRARY_TAG }}
           workdir: package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
