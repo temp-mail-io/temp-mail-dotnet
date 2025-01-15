@@ -77,7 +77,6 @@ jobs:
         cp ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg ./package
         cp ./src/TempMail.Client.AspNetCore/bin/Debug/TempMail.Client.AspNetCore.*.nupkg ./package
         dotnet nuget push ./package/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
-        dotnet nuget push ./package/TempMail.Client.AspNetCore.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
     - name: GitHub Tag 
       uses: IIlyichev/github-tag-action@v6.3
       with:
