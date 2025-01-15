@@ -91,4 +91,4 @@ jobs:
             -H 'X-GitHub-Api-Version: 2022-11-28' \
             -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             https://api.github.com/repos/temp-mail-io/temp-mail-dotnet/releases \
-            -d '{ "tag_name":"${{ env.LIBRARY_TAG }}", "name":"${{ env.LIBRARY_TAG }}", "make_latest":true, "draft":false, "prerelease":false, "generate_release_notes":true, "body": "## NuGet Packages: * [TempMail.Client](https://www.nuget.org/packages/TempMail.Client/${{ env.LIBRARY_VERSION }}) * [TempMail.Client.AspNetCore](https://www.nuget.org/packages/TempMail.Client.AspNetCore/${{ env.LIBRARY_VERSION }})" }'
+            -d '{ "tag_name":"${{ env.LIBRARY_TAG }}", "name":"${{ env.LIBRARY_TAG }}", "make_latest":true, "draft":false, "prerelease":false, "generate_release_notes":true, "body": "## NuGet Packages: \n* [TempMail.Client](https://www.nuget.org/packages/TempMail.Client/${{ env.LIBRARY_VERSION }}) \n* [TempMail.Client.AspNetCore](https://www.nuget.org/packages/TempMail.Client.AspNetCore/${{ env.LIBRARY_VERSION }})" }'
