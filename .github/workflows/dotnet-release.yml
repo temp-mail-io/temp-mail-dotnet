@@ -29,9 +29,9 @@ jobs:
         run: dotnet tool restore
       - name: Set Input Parameters
         run: |
-          VERSION_SUFFIX=$(if [ ${{ inputs.pre_release }} ]; then echo "rc"; else echo ""; fi)
-          VERSION_MASK=$(if [ ${{ inputs.pre_release }} ]; then echo "0.0.0.1"; else echo "0.0.1.0"; fi)          
-          CONFIGURATION=$(if [ ${{ inputs.pre_release }} ]; then echo "Debug"; else echo "Release"; fi)
+          VERSION_SUFFIX=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "rc"; else echo ""; fi)
+          VERSION_MASK=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "0.0.0.1"; else echo "0.0.1.0"; fi)          
+          CONFIGURATION=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "Debug"; else echo "Release"; fi)
           echo "CONFIGURATION=$CONFIGURATION"
           echo "CONFIGURATION=$CONFIGURATION" >> $GITHUB_ENV
           echo "VERSION_MASK=$VERSION_MASK"
@@ -94,8 +94,8 @@ jobs:
       - name: Publish NuGet Packages
         run: |
           mkdir ./package
-          cp ./src/TempMail.Client/bin/Debug/TempMail.Client.*.nupkg ./package
-          cp ./src/TempMail.Client.AspNetCore/bin/Debug/TempMail.Client.AspNetCore.*.nupkg ./package
+          cp ./src/TempMail.Client/bin/${{ env.CONFIGURATION }}/TempMail.Client.*.nupkg ./package
+          cp ./src/TempMail.Client.AspNetCore/bin/${{ env.CONFIGURATION }}/TempMail.Client.AspNetCore.*.nupkg ./package
           dotnet nuget push ./package/TempMail.Client.*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
       - name: GitHub Tag
         uses: IIlyichev/github-tag-action@v6.3
