@@ -11,7 +11,7 @@ public class Domain(string name, DomainType type)
     /// Domain name
     /// </summary>
     public string Name { get; } = name;
-    
+
     /// <summary>
     /// Domain type
     /// </summary>

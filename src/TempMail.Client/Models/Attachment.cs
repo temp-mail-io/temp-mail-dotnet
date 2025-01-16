@@ -15,12 +15,12 @@ public class Attachment(
     /// Attachment ID
     /// </summary>
     public string Id { get; } = id;
-    
+
     /// <summary>
     /// Attachment name
     /// </summary>
     public string Name { get; } = name;
-    
+
     /// <summary>
     /// Attachment size
     /// </summary>

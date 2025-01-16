@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 
@@ -28,14 +29,14 @@ internal class CreateEmailRequestJsonConverter : JsonConverter<CreateEmailReques
         {
             throw new JsonException();
         }
-        
+
         var propertyName = reader.GetString();
 
         if (!reader.Read())
         {
             throw new JsonException();
         }
-        
+
         var propertyValue = reader.GetString() ?? throw new JsonException();
 
         CreateEmailRequest result;
@@ -54,7 +55,7 @@ internal class CreateEmailRequestJsonConverter : JsonConverter<CreateEmailReques
                 }
                 result = CreateEmailRequest.ByDomainType(domainType);
                 break;
-            
+
             default:
                 throw new JsonException();
         }
@@ -63,7 +64,7 @@ internal class CreateEmailRequestJsonConverter : JsonConverter<CreateEmailReques
         {
             reader.Read();
         }
-        
+
         return result ?? throw new JsonException();
     }
 

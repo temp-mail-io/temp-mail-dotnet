@@ -11,7 +11,7 @@ public class ErrorResponse(Error error, ErrorMeta meta)
     /// The error itself
     /// </summary>
     public Error Error { get; } = error;
-    
+
     /// <summary>
     /// Meta-information about the error
     /// </summary>
@@ -45,12 +45,12 @@ public class Error(
     /// Type of the error
     /// </summary>
     public ErrorType Type { get; } = type;
-    
+
     /// <summary>
     /// Error code. Some common codes are <c>not_found</c>, <c>invalid_api_key</c>, <c>rate_limited</c>, <c>validation_error</c>.
     /// </summary>
     public string Code { get; } = code;
-    
+
     /// <summary>
     /// Error details
     /// </summary>
@@ -66,7 +66,7 @@ public enum ErrorType
     /// Indicates that there was an error with the sent request
     /// </summary>
     RequestError = 0,
-    
+
     /// <summary>
     /// Indicates that there was an error during the request handling
     /// </summary>

@@ -9,12 +9,12 @@ public enum DomainType
     /// Public domain type
     /// </summary>
     Public = 0,
-    
+
     /// <summary>
     /// Custom domain type
     /// </summary>
     Custom = 1,
-    
+
     /// <summary>
     /// Premium domain type
     /// </summary>

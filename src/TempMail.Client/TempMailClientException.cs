@@ -1,4 +1,5 @@
 ﻿using System;
+
 using TempMail.Client.Responses;
 
 namespace TempMail.Client;
@@ -6,9 +7,9 @@ namespace TempMail.Client;
 public class TempMailClientException : Exception
 {
     public ErrorResponse? Error { get; }
-    
+
     public byte[]? ErrorData { get; }
-    
+
     public TempMailClientException(ErrorResponse error) : base(
         $"Error of type {error.Error.Type} ({error.Error.Code}) occurred: {error.Error.Detail}. " +
         $"Try contacting support with the request ID: {error.Meta.RequestId}")

@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddHttpClient(nameof(TempMailClient))
-            .Services.AddSingleton<TempMailClientConfiguration>(_ => TempMailClientConfigurationBuilder
+            .Services.AddSingleton(_ => TempMailClientConfigurationBuilder
                 .Create()
                 .WithApiKey(apiKey)
                 .Build())
@@ -24,10 +24,10 @@ public static class ServiceCollectionExtensions
                 var configuration = p.GetRequiredService<TempMailClientConfiguration>();
                 return TempMailClient.Create(configuration, httpClient);
             });
-        
+
         return services;
     }
-    
+
     /// <summary>
     /// Register <see cref="TempMailClient"/>
     /// </summary>
@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddHttpClient(nameof(TempMailClient))
-            .Services.AddSingleton<TempMailClientConfiguration>(_ => config)
+            .Services.AddSingleton(_ => config)
             .AddTransient<ITempMailClient>(p =>
             {
                 var httpClientFactory = p.GetRequiredService<IHttpClientFactory>();
@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
                 var configuration = p.GetRequiredService<TempMailClientConfiguration>();
                 return TempMailClient.Create(configuration, httpClient);
             });
-        
+
         return services;
     }
 }

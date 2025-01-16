@@ -9,7 +9,7 @@ public class GetAllMessagesRequest
     {
         Email = email;
     }
-    
+
     /// <summary>
     /// The box from which to get all the messages
     /// </summary>
@@ -23,7 +23,7 @@ public class GetAllMessagesRequest
     public static GetAllMessagesRequest Create(string email)
     {
         Helpers.ValidateEmail(email);
-        
+
         return new GetAllMessagesRequest(email);
     }
 }

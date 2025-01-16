@@ -9,7 +9,7 @@ public class DeleteEmailRequest
     {
         Email = email;
     }
-    
+
     /// <summary>
     /// E-mail address to delete
     /// </summary>
@@ -23,7 +23,7 @@ public class DeleteEmailRequest
     public static DeleteEmailRequest Create(string email)
     {
         Helpers.ValidateEmail(email);
-        
+
         return new DeleteEmailRequest(email);
     }
 }

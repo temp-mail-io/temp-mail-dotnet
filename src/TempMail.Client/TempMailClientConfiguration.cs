@@ -9,7 +9,7 @@ public record TempMailClientConfiguration
     internal TempMailClientConfiguration()
     {
     }
-    
+
     /// <summary>
     /// API url, specifies address to which all the requests will be sent
     /// </summary>

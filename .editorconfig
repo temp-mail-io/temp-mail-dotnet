@@ -113,11 +113,11 @@ csharp_style_prefer_readonly_struct = true:suggestion
 csharp_style_prefer_readonly_struct_member = true:suggestion
 
 # Code-block preferences
-csharp_prefer_braces = true:silent
-csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_braces = true:error
+csharp_prefer_simple_using_statement = true:error
 csharp_style_namespace_declarations = file_scoped:suggestion
-csharp_style_prefer_method_group_conversion = true:silent
-csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_method_group_conversion = true:error
+csharp_style_prefer_primary_constructors = true:error
 csharp_style_prefer_top_level_statements = true:silent
 
 # Expression-level preferences
@@ -365,3 +365,18 @@ dotnet_naming_style.camelcase.required_prefix =
 dotnet_naming_style.camelcase.required_suffix = 
 dotnet_naming_style.camelcase.word_separator = 
 dotnet_naming_style.camelcase.capitalization = camel_case
+
+# Code style
+
+# Simplify name
+dotnet_diagnostic.IDE0001.severity = error
+# Simplify member access
+dotnet_diagnostic.IDE0002.severity = error
+# remove `this`
+dotnet_diagnostic.IDE0003.severity = error
+# Remove unnecessary cast
+dotnet_diagnostic.IDE0004.severity = error
+# Remove unnecessary using directives
+dotnet_diagnostic.IDE0005.severity = error
+# Use var instead of explicit type
+dotnet_diagnostic.IDE0007.severity = error

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+
 using TempMail.Client.Models;
 
 namespace TempMail.Client;

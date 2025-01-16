@@ -18,7 +18,7 @@ public class CreateEmailRequestTests
     {
         var resp = await SetUp.Client.CreateEmail(CreateEmailRequest.ByEmail(email), CancellationToken.None);
         Assert.That(resp, Is.Not.Null);
-        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult.Error.Detail);
+        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult!.Error.Detail);
         Assert.That(resp.Result, Is.Not.Null);
         Assert.That(resp.Result.Email, Is.EqualTo(email));
         Assert.That(resp.Result.Ttl, Is.Positive);
@@ -29,7 +29,7 @@ public class CreateEmailRequestTests
     {
         var resp = await SetUp.Client.CreateEmail(CreateEmailRequest.ByDomain(domain), CancellationToken.None);
         Assert.That(resp, Is.Not.Null);
-        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult.Error.Detail);
+        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult!.Error.Detail);
         Assert.That(resp.Result, Is.Not.Null);
         Assert.That(resp.Result.Email, Does.EndWith(domain));
         Assert.That(resp.Result.Ttl, Is.Positive);
@@ -40,7 +40,7 @@ public class CreateEmailRequestTests
     {
         var resp = await SetUp.Client.CreateEmail(CreateEmailRequest.ByDomainType(domainType), CancellationToken.None);
         Assert.That(resp, Is.Not.Null);
-        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult.Error.Detail);
+        Assert.That(resp.IsSuccess, Is.True, () => resp.ErrorResult!.Error.Detail);
         Assert.That(resp.Result, Is.Not.Null);
         Assert.That(resp.Result.Email, Does.Contain(domainType.ToString().ToLowerInvariant()));
         Assert.That(resp.Result.Ttl, Is.Positive);

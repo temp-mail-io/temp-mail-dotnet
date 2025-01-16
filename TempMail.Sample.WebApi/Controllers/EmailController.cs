@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+
 using TempMail.Client;
 using TempMail.Client.Requests;
 
@@ -12,7 +13,7 @@ public class EmailController(ITempMailClient tempMailClient) : ControllerBase
     public async Task<IActionResult> Search([FromRoute] string email, [FromQuery] string query)
     {
         var messagesResponse = await tempMailClient.GetAllMessages(GetAllMessagesRequest.Create(email));
-        
+
         messagesResponse.ThrowIfError();
 
         if (string.IsNullOrWhiteSpace(query))
@@ -27,7 +28,7 @@ public class EmailController(ITempMailClient tempMailClient) : ControllerBase
                 m.Subject.Contains(query) ||
                 m.Cc.Contains(query) ||
                 m.BodyText.Contains(query));
-        
+
         return Ok(queriedMessages);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+
 using TempMail.Client.Responses;
 
 namespace TempMail.Client.Tests;
@@ -10,7 +11,7 @@ public class GetRateLimitStatusTests
     {
         SetUp.Handler.ReturnErrors(false);
     }
-    
+
     [Test]
     public async Task TestGetRateLimitStatus()
     {
@@ -24,14 +25,14 @@ public class GetRateLimitStatusTests
         Assert.That(rateLimitResponse.Result.Used, Is.Positive);
         Assert.That(rateLimitResponse.Result.ResetDateTime, Is.GreaterThan(DateTime.UtcNow));
     }
-    
+
     [Test]
     public async Task TestGetRateLimitStatus_Error()
     {
         SetUp.Handler.ReturnErrors();
-        
+
         var domainsResponse = await SetUp.Client.GetRateLimitStatus();
-        
+
         Assert.That(domainsResponse, Is.Not.Null);
         Assert.That(domainsResponse.IsSuccess, Is.False);
         Assert.That(domainsResponse.ErrorResult, Is.Not.Null);
