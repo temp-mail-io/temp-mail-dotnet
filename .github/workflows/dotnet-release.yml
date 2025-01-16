@@ -47,8 +47,10 @@ jobs:
       - name: Set Version Env Var
         run: |
           LIBRARY_VERSION=$(dotnet pwsh -c "(Select-Xml -Path ./version.xml -XPath '/Version' | Select-Object -ExpandProperty Node).InnerText")
-          LIBRARY_TAG="v$LIBRARY_VERSION$(if ${{ inputs.pre_release }}; then echo "-${{ env.VERSION_SUFFIX }}"; else echo ""; fi)"
+          FULL_LIBRARY_VERSION="$LIBRARY_VERSION$(if ${{ inputs.pre_release }}; then echo "-${{ env.VERSION_SUFFIX }}"; else echo ""; fi)"
+          LIBRARY_TAG="v$FULL_LIBRARY_VERSION"
           echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
+          echo "FULL_LIBRARY_VERSION=$FULL_LIBRARY_VERSION" >> $GITHUB_ENV
           echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
       - name: Restore dependencies
         run: dotnet restore
@@ -104,7 +106,7 @@ jobs:
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          body: "## NuGet Packages: \n* [TempMail.Client](https://www.nuget.org/packages/TempMail.Client/${{ env.LIBRARY_VERSION }}) \n* [TempMail.Client.AspNetCore](https://www.nuget.org/packages/TempMail.Client.AspNetCore/${{ env.LIBRARY_VERSION }})"
+          body: "## NuGet Packages: \n* [TempMail.Client](https://www.nuget.org/packages/TempMail.Client/${{ env.FULL_LIBRARY_VERSION }}) \n* [TempMail.Client.AspNetCore](https://www.nuget.org/packages/TempMail.Client.AspNetCore/${{ env.FULL_LIBRARY_VERSION }})"
           prerelease: ${{ inputs.pre_release }}
           tag_name: ${{ env.LIBRARY_TAG }}
           name: ${{ env.LIBRARY_TAG }}
