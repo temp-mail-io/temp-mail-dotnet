@@ -90,7 +90,11 @@ public class TempMailClient : ITempMailClient
 
             if (errorResponseContent?.Error is null)
             {
-                throw new NotImplementedException("TODO: create custom exception");
+                var bytes = new byte[errorResponseContentStream.Length];
+                using var ms = new MemoryStream(bytes);
+                errorResponseContentStream.Seek(0L, SeekOrigin.Begin);
+                await errorResponseContentStream.CopyToAsync(ms, ct);
+                throw new TempMailClientException(bytes);
             }
             
             return Response.Error<TResponse>(errorResponseContent);

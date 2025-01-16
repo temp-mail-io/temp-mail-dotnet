@@ -25,6 +25,14 @@ public class Response<TSuccess>
     /// Error response, not <c>null</c> if <see cref="IsSuccess"/> is <c>false</c>, otherwise - <c>null</c>
     /// </summary>
     public ErrorResponse? ErrorResult { get; internal set; }
+
+    public void ThrowIfError()
+    {
+        if (!IsSuccess)
+        {
+            throw new TempMailClientException(ErrorResult!);
+        }
+    }
 }
 
 public static class Response
