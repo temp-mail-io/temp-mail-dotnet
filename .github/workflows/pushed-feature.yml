@@ -4,16 +4,9 @@ on:
   push: 
     branches:
       - "feature/**"
-        
-        
-jobs: 
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Run Whole Pipeline
-        uses: temp-mail-io/temp-mail-dotnet/.github/dotnet-release/action.yml@${{ github.sha }}
-        with:
-          pre_release: true
+
+jobs:
+  release-dotnet:
+    uses: ./.github/dotnet-release/action.yml
+    with:
+      pre_release: true
