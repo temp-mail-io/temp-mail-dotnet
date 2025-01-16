@@ -92,4 +92,4 @@ jobs:
           name: ${{ env.LIBRARY_TAG }}
           generate_release_notes: true
           append_body: true
-          files: ./package
+          files: ./package/*
