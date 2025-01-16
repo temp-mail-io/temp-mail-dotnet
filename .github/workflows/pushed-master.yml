@@ -7,7 +7,7 @@ on:
         
 jobs: 
   release-dotnet:
-    uses: ./.github/dotnet-release/action.yml
+    uses: ./.github/dotnet-release.yml
     with: 
       pre_release: false
   
