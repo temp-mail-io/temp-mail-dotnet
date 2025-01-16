@@ -10,3 +10,4 @@ jobs:
     uses: ./.github/workflows/dotnet-release.yml
     with:
       pre_release: true
+    secrets: inherit
