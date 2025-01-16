@@ -1,4 +1,4 @@
-﻿name: PR to `master`
+﻿name: Pushed to `feature/**`
 
 on:
   pull_request:
