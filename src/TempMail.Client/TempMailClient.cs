@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 using TempMail.Client.Responses;
@@ -18,10 +19,10 @@ namespace TempMail.Client;
 /// </summary>
 public class TempMailClient : ITempMailClient
 {
-    private readonly HttpClient _httpClient;
-    private readonly bool _disposeHttpClient;
-    
-    private static readonly JsonSerializerOptions JsonOptions = new ()
+    private readonly HttpClient httpClient;
+    private readonly bool disposeHttpClient;
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -30,18 +31,18 @@ public class TempMailClient : ITempMailClient
             new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
         }
     };
-        
+
     private TempMailClient(
         TempMailClientConfiguration config,
         HttpClient httpClient,
         bool disposeHttpClient)
     {
-        _httpClient = httpClient;
-        _disposeHttpClient = disposeHttpClient;
-        _httpClient.BaseAddress = new Uri(config.ApiUrl);
-        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        _httpClient.DefaultRequestHeaders.Add("X-API-Key", config.ApiKey);
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", $".NET temp-mail.io client (Library version: {config.ClientVersion}; .NET Runtime: {config.DotnetRuntimeVersion}; OS: {config.OsVersion})");
+        this.httpClient = httpClient;
+        this.disposeHttpClient = disposeHttpClient;
+        this.httpClient.BaseAddress = new Uri(config.ApiUrl);
+        this.httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        this.httpClient.DefaultRequestHeaders.Add("X-API-Key", config.ApiKey);
+        this.httpClient.DefaultRequestHeaders.Add("User-Agent", $".NET temp-mail.io client (Library version: {config.ClientVersion}; .NET Runtime: {config.DotnetRuntimeVersion}; OS: {config.OsVersion})");
     }
 
     /// <summary>
@@ -49,7 +50,7 @@ public class TempMailClient : ITempMailClient
     /// </summary>
     /// <param name="config"><see cref="TempMailClientConfiguration"/></param>
     /// <returns><see cref="TempMailClient"/></returns>
-    public static TempMailClient Create(TempMailClientConfiguration config) => 
+    public static TempMailClient Create(TempMailClientConfiguration config) =>
         Create(config, new HttpClient(), true);
 
     /// <summary>
@@ -71,16 +72,16 @@ public class TempMailClient : ITempMailClient
 
     private async Task<Response<TResponse>> SendHttpRequest<TResponse>(HttpRequestMessage msg, CancellationToken ct)
     {
-        var response = await _httpClient
+        var response = await httpClient
             .SendAsync(msg, ct)
             .ConfigureAwait(false);
-        
+
         if (!response.IsSuccessStatusCode)
         {
             await using var errorResponseContentStream = await response.Content
                 .ReadAsStreamAsync()
                 .ConfigureAwait(false);
-            
+
             var errorResponseContent = await JsonSerializer
                 .DeserializeAsync<ErrorResponse>(
                     errorResponseContentStream,
@@ -90,12 +91,16 @@ public class TempMailClient : ITempMailClient
 
             if (errorResponseContent?.Error is null)
             {
-                throw new NotImplementedException("TODO: create custom exception");
+                var bytes = new byte[errorResponseContentStream.Length];
+                using var ms = new MemoryStream(bytes);
+                errorResponseContentStream.Seek(0L, SeekOrigin.Begin);
+                await errorResponseContentStream.CopyToAsync(ms, ct);
+                throw new TempMailClientException(bytes);
             }
-            
+
             return Response.Error<TResponse>(errorResponseContent);
         }
-        
+
         if (typeof(TResponse) == typeof(EmptyResponse))
         {
             return Unsafe.As<Response<TResponse>>(Response.Success(new EmptyResponse()));
@@ -106,10 +111,10 @@ public class TempMailClient : ITempMailClient
             var responseContentString = await response.Content
                 .ReadAsStringAsync()
                 .ConfigureAwait(false);
-            
+
             return Unsafe.As<Response<TResponse>>(Response.Success(responseContentString));
         }
-        
+
         await using var responseContentStream = await response.Content
             .ReadAsStreamAsync()
             .ConfigureAwait(false);
@@ -120,17 +125,17 @@ public class TempMailClient : ITempMailClient
             using var ms = new MemoryStream(bytes);
             await responseContentStream.CopyToAsync(ms, ct)
                 .ConfigureAwait(false);
-            
+
             return Unsafe.As<Response<TResponse>>(Response.Success(bytes));
         }
-        
+
         var responseContent = await JsonSerializer
             .DeserializeAsync<TResponse>(
                 responseContentStream,
                 JsonOptions,
                 ct)
             .ConfigureAwait(false);
-        
+
         return Response.Success(responseContent!);
     }
 
@@ -138,7 +143,7 @@ public class TempMailClient : ITempMailClient
         TRequest request,
         string url,
         HttpMethod method,
-        CancellationToken ct = default) 
+        CancellationToken ct = default)
     {
         var stringRequestContent = JsonSerializer.Serialize(request, JsonOptions);
         using var content = new StringContent(stringRequestContent, Encoding.UTF8, "application/json");
@@ -167,7 +172,7 @@ public class TempMailClient : ITempMailClient
         GetAllMessagesRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<GetAllMessagesResponse>($"/v1/emails/{request.Email}/messages", HttpMethod.Get, ct);
-    
+
     public Task<Response<EmptyResponse>> DeleteEmail(
         DeleteEmailRequest request,
         CancellationToken ct = default) =>
@@ -203,9 +208,9 @@ public class TempMailClient : ITempMailClient
 
     public void Dispose()
     {
-        if (_disposeHttpClient)
+        if (disposeHttpClient)
         {
-            _httpClient.Dispose();
+            httpClient.Dispose();
         }
     }
 }

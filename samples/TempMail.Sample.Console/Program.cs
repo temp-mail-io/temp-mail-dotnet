@@ -9,7 +9,7 @@ using var client = TempMailClient.Create(
         .Create()
         .WithApiKey( /*paste your API-Key here*/ null)
         .Build());
-        
+
 var domainsResponse = await client.GetAvailableDomains();
 
 if (domainsResponse is not { IsSuccess: true, Result.Domains: { } domains })

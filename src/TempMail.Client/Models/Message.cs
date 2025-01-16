@@ -29,42 +29,42 @@ public class Message(
     /// E-mail message ID
     /// </summary>
     public string Id { get; } = id;
-    
+
     /// <summary>
     /// E-mail message sender e-mail
     /// </summary>
     public string From { get; } = from;
-    
+
     /// <summary>
     /// E-mail message recipient e-mail
     /// </summary>
     public string To { get; } = to;
-    
+
     /// <summary>
     /// "Carbon copy", additional recipients e-mails
     /// </summary>
     public string Cc { get; } = cc;
-    
+
     /// <summary>
     /// E-mail message subject
     /// </summary>
     public string Subject { get; } = subject;
-    
+
     /// <summary>
     /// E-mail message body text representation
     /// </summary>
     public string BodyText { get; } = bodyText;
-    
+
     /// <summary>
     /// E-mail message body HTML representation
     /// </summary>
     public string BodyHtml { get; } = bodyHtml;
-    
+
     /// <summary>
     /// Timestamp at which the e-mail message was created
     /// </summary>
     public DateTime CreatedAt { get; } = createdAt;
-    
+
     /// <summary>
     /// List of <see cref="Attachment"/>s
     /// </summary>

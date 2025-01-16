@@ -1,23 +1,26 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
+using JetBrains.Annotations;
+
 namespace TempMail.Client.Tests.Util;
 
+[MeansImplicitUse]
 [AttributeUsage(AttributeTargets.Method)]
 internal class HandlerAttribute(
     [StringSyntax(StringSyntaxAttribute.Regex)] string route,
-    string httpMethod) 
+    string httpMethod)
     : Attribute
 {
-    private readonly Regex _regex = new(route, RegexOptions.Compiled);
-    
+    private readonly Regex regex = new(route, RegexOptions.Compiled);
+
     public string Route { get; } = route;
-    
+
     public string HttpMethod { get; } = httpMethod;
 
     public string? Matches(HttpRequestMessage request)
     {
-        var match = _regex.Match(request.RequestUri?.ToString() ?? string.Empty);
+        var match = regex.Match(request.RequestUri?.ToString() ?? string.Empty);
         if (!match.Success ||
             !request.Method.Method.Equals(HttpMethod, StringComparison.InvariantCultureIgnoreCase))
         {
@@ -26,8 +29,8 @@ internal class HandlerAttribute(
 
         if (match.Groups.Count > 1)
         {
-            return match.Groups[1].Value.Contains('/') 
-                ? null 
+            return match.Groups[1].Value.Contains('/')
+                ? null
                 : match.Groups[1].Value;
         }
 

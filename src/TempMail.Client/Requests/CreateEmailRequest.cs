@@ -47,19 +47,19 @@ public abstract class CreateEmailRequest
     public static CreateEmailRequest ByDomainType(DomainType domainType)
     {
         Helpers.ValidateDomainType(domainType);
-        
+
         return new CreateEmailByDomainTypeRequest(domainType);
     }
     /// <summary>
     /// Email, only available if the request was created by email
     /// </summary>
     public string? Email => this is CreateEmailByEmailRequest request ? request.Email : null;
-    
+
     /// <summary>
     /// Domain, only available if the request was created by domain
     /// </summary>
     public string? Domain => this is CreateEmailByDomainRequest request ? request.Domain : null;
-    
+
     /// <summary>
     /// Domain type, only available if the request was created by domain type
     /// </summary>

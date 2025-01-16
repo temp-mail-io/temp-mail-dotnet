@@ -8,7 +8,7 @@ public class SetUp
     internal static ITempMailClient Client { get; private set; } = null!;
     internal static MockingHttpMessageHandler Handler { get; private set; } = null!;
     internal static InMemoryMailboxManager MailboxManager { get; private set; } = null!;
-    
+
     [OneTimeSetUp]
     public void RunBeforeAnyTests()
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 using TempMail.Client.Responses;
@@ -31,7 +32,7 @@ public interface ITempMailClient : IDisposable
     Task<Response<GetAllMessagesResponse>> GetAllMessages(
         GetAllMessagesRequest request,
         CancellationToken ct = default);
-    
+
     /// <summary>
     /// Delete given e-mail box
     /// </summary>

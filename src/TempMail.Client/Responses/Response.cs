@@ -9,22 +9,30 @@
 /// </remarks>
 public class Response<TSuccess>
 {
-    internal Response() {}
-    
+    internal Response() { }
+
     /// <summary>
     /// Tells whether the request has finished successfully
     /// </summary>
     public bool IsSuccess { get; internal set; }
-    
+
     /// <summary>
     /// Successful response, not <c>null</c> if <see cref="IsSuccess"/> is <c>true</c>, otherwise - <c>null</c>
     /// </summary>
     public TSuccess? Result { get; internal set; }
-    
+
     /// <summary>
     /// Error response, not <c>null</c> if <see cref="IsSuccess"/> is <c>false</c>, otherwise - <c>null</c>
     /// </summary>
     public ErrorResponse? ErrorResult { get; internal set; }
+
+    public void ThrowIfError()
+    {
+        if (!IsSuccess)
+        {
+            throw new TempMailClientException(ErrorResult!);
+        }
+    }
 }
 
 public static class Response

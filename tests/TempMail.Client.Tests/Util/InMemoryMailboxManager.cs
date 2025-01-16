@@ -8,7 +8,7 @@ public class InMemoryMailboxManager
     public Dictionary<string, Mailbox> Mailboxes { get; } = [];
 
     public Dictionary<string, Message> Messages { get; } = [];
-    
+
     public Dictionary<string, byte[]> Attachments { get; } = [];
 
     public Dictionary<DomainType, string> Domains { get; } = new()
@@ -17,12 +17,12 @@ public class InMemoryMailboxManager
         { DomainType.Public, "public.com" },
         { DomainType.Premium, "premium.com" }
     };
-    
+
     public RateLimitStatus RateLimitStatus { get; } = new(
         int.MaxValue,
         int.MaxValue,
         int.MaxValue,
-        Convert.ToInt32(DateTime.UtcNow.AddDays(30).Subtract(DateTime.UnixEpoch).TotalSeconds)); 
+        Convert.ToInt32(DateTime.UtcNow.AddDays(30).Subtract(DateTime.UnixEpoch).TotalSeconds));
 
 
     public string CreateEmail(CreateEmailRequest request)
@@ -36,7 +36,7 @@ public class InMemoryMailboxManager
                 }
                 Mailboxes.Add(email, new Mailbox(email));
                 return email;
-            
+
             case CreateEmailByDomainRequest { Domain: var domain }:
                 var byDomainEmail = $"{Guid.NewGuid():N}@{domain}";
                 if (Mailboxes.TryGetValue(byDomainEmail, out _))
@@ -45,7 +45,7 @@ public class InMemoryMailboxManager
                 }
                 Mailboxes.Add(byDomainEmail, new Mailbox(byDomainEmail));
                 return byDomainEmail;
-            
+
             case CreateEmailByDomainTypeRequest { DomainType: var domainType }:
                 var byDomainTypeEmail = $"{Guid.NewGuid():N}@{Domains[domainType]}";
                 if (Mailboxes.TryGetValue(byDomainTypeEmail, out _))
@@ -54,16 +54,16 @@ public class InMemoryMailboxManager
                 }
                 Mailboxes.Add(byDomainTypeEmail, new Mailbox(byDomainTypeEmail));
                 return byDomainTypeEmail;
-            
+
             default:
                 throw new Exception($"Unknown email type: {request}");
         }
     }
 
     public Message[] GetAllMessages(string email) => Mailboxes[email].Messages.Values.ToArray();
-    
+
     public void DeleteEmail(string email) => Mailboxes.Remove(email);
-    
+
     public Message GetSpecificMessage(string id) => Messages[id];
 
     public void DeleteSpecificMessage(string id)
@@ -77,13 +77,13 @@ public class InMemoryMailboxManager
     }
 
     public string GetMessageSourceCode(string messageId) => Messages[messageId].BodyHtml;
-    
+
     public byte[] GetAttachment(string attachmentId) => Attachments[attachmentId];
-    
+
     public Domain[] GetAvailableDomains() => Domains
         .Select(x => new Domain(x.Value, x.Key))
         .ToArray();
-    
+
     public void AddMessage(Message message)
     {
         if (!Messages.TryAdd(message.Id, message))

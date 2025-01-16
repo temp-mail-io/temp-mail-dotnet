@@ -1,0 +1,13 @@
+﻿name: Pushed to `feature/**`
+
+on:
+  push: 
+    branches:
+      - "feature/**"
+
+jobs:
+  release-dotnet:
+    uses: ./.github/workflows/dotnet-release.yml
+    with:
+      pre_release: true
+    secrets: inherit
