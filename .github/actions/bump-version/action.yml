@@ -13,7 +13,7 @@ runs:
   steps:
     - name: Parse Version And Bump It
       id: parse-version
-      shell: dotnet pwsh
+      shell: pwsh
       run: |
         $version = ( `
           Select-Xml -Path ${{ inputs.version_file }} -XPath '//Version' | `
@@ -25,7 +25,7 @@ runs:
         Add-Content -Path "$GITHUB_OUTPUT" -Value "old-version=$version"
         Add-Content -Path "$GITHUB_OUTPUT" -Value "new-version=$newVersion"
     - name: Push New Version
-      shell: dotnet pwsh
+      shell: pwsh
       run: |
         git config --global user.name 'version bump'
         git config --global user.email 'version-bump@users.noreply.github.com'

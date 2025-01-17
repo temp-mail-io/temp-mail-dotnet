@@ -42,13 +42,18 @@ jobs:
           version_mask: ${{ inputs.version_mask }}
           version_files: "version.xml"
       - name: Set Version Env Var
+        shell: pwsh
         run: |
-          LIBRARY_VERSION=$(dotnet pwsh -c "(Select-Xml -Path ./version.xml -XPath '/Version' | Select-Object -ExpandProperty Node).InnerText")
-          FULL_LIBRARY_VERSION="$LIBRARY_VERSION$(if ${{ inputs.pre_release }}; then echo "-${{ env.VERSION_SUFFIX }}"; else echo ""; fi)"
-          LIBRARY_TAG="v$FULL_LIBRARY_VERSION"
-          echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
-          echo "FULL_LIBRARY_VERSION=$FULL_LIBRARY_VERSION" >> $GITHUB_ENV
-          echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
+          $lib_ver=(Select-Xml -Path ./version.xml -XPath '/Version' | Select-Object -ExpandProperty Node).InnerText
+          $full_ver=if ("${{ inputs.pre_release }}" -eq "true") {
+            "$lib_ver-${{ env.VERSION_SUFFIX }}"
+          } else {
+            ""
+          }
+          $tag="v$full_ver"
+          Add-Content -Path "$GITHUB_ENV" -Value "LIBRARY_VERSION=$lib_ver"
+          Add-Content -Path "$GITHUB_ENV" -Value "FULL_LIBRARY_VERSION=$full_ver"
+          Add-Content -Path "$GITHUB_ENV" -Value "LIBRARY_TAG=$tag"
       - name: Build & Test
         uses: ./.github/actions/build-n-test
         with:

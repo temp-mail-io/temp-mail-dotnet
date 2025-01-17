@@ -29,7 +29,7 @@ runs:
       run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage -c ${{ inputs.configuration }}
     - name: Code Coverage Summary
       id: code-coverage-summary
-      shell: dotnet pwsh
+      shell: pwsh
       run: |
         $lr = [System.Math]::Round( `
           $(Select-Xml -Path ./coverage/*/coverage.cobertura.xml -XPath "//package" ` 
@@ -49,7 +49,7 @@ runs:
         } | ConvertTo-Json
         Add-Content -Path "$GITHUB_OUTPUT" -Value "code-coverage-badge-data=$codeCoverageBadgeData"
     - name: Create Code Coverage Badge
-      shell: dotnet pwsh
+      shell: pwsh
       run: |
         $response = Invoke-WebRequest `
         -Method Patch `
