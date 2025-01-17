@@ -46,7 +46,7 @@ runs:
               } | ConvertTo-Json)
             }
           } 
-        } | ConvertTo-Json
+        } | ConvertTo-Json -Compress
         Add-Content -Path "$env:GITHUB_OUTPUT" -Value "code-coverage-badge-data=$codeCoverageBadgeData"
     - name: Create Code Coverage Badge
       shell: pwsh
