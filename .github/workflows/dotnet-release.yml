@@ -48,7 +48,7 @@ jobs:
           $full_ver=if ("${{ inputs.pre_release }}" -eq "true") {
             "$lib_ver-${{ env.VERSION_SUFFIX }}"
           } else {
-            ""
+            "$lib_ver"
           }
           $tag="v$full_ver"
           Add-Content -Path "$env:GITHUB_ENV" -Value "LIBRARY_VERSION=$lib_ver"
