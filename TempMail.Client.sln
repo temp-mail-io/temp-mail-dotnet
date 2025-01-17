@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMail.Sample.Console", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMail.Client.Tests", "tests\TempMail.Client.Tests\TempMail.Client.Tests.csproj", "{A06EA602-D7A9-41F7-A0EF-0B528F42207E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMail.Sample.WebApi", "TempMail.Sample.WebApi\TempMail.Sample.WebApi.csproj", "{E41EBFC2-CAD9-4D3D-B361-789A2AD0126F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMail.Sample.WebApi", "samples\TempMail.Sample.WebApi\TempMail.Sample.WebApi.csproj", "{E41EBFC2-CAD9-4D3D-B361-789A2AD0126F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
