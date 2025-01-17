@@ -11,8 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\TempMail.Client.AspNetCore\TempMail.Client.AspNetCore.csproj" />
-      <ProjectReference Include="..\src\TempMail.Client\TempMail.Client.csproj" />
+      <ProjectReference Include="..\..\src\TempMail.Client.AspNetCore\TempMail.Client.AspNetCore.csproj" />
     </ItemGroup>
 
 </Project>
