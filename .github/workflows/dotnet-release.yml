@@ -51,9 +51,9 @@ jobs:
             ""
           }
           $tag="v$full_ver"
-          Add-Content -Path "$GITHUB_ENV" -Value "LIBRARY_VERSION=$lib_ver"
-          Add-Content -Path "$GITHUB_ENV" -Value "FULL_LIBRARY_VERSION=$full_ver"
-          Add-Content -Path "$GITHUB_ENV" -Value "LIBRARY_TAG=$tag"
+          Add-Content -Path "$env:GITHUB_ENV" -Value "LIBRARY_VERSION=$lib_ver"
+          Add-Content -Path "$env:GITHUB_ENV" -Value "FULL_LIBRARY_VERSION=$full_ver"
+          Add-Content -Path "$env:GITHUB_ENV" -Value "LIBRARY_TAG=$tag"
       - name: Build & Test
         uses: ./.github/actions/build-n-test
         with:

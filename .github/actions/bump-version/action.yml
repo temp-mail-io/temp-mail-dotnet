@@ -22,8 +22,8 @@ runs:
         $versionMasks = "${{ inputs.version_mask }}".Split('.')
         $newVersion = "$([int]$versions[0] + [int]$versionMasks[0]).$([int]$versions[1] + [int]$versionMasks[1]).$([int]$versions[2] + [int]$versionMasks[2]).$([int]$versions[3] + [int]$versionMasks[3])"
         Set-Content -Path ${{ inputs.version_file }} -Value "<Version>$newVersion</Version>"
-        Add-Content -Path "$GITHUB_OUTPUT" -Value "old-version=$version"
-        Add-Content -Path "$GITHUB_OUTPUT" -Value "new-version=$newVersion"
+        Add-Content -Path "$env:GITHUB_OUTPUT" -Value "old-version=$version"
+        Add-Content -Path "$env:GITHUB_OUTPUT" -Value "new-version=$newVersion"
     - name: Push New Version
       shell: pwsh
       run: |
