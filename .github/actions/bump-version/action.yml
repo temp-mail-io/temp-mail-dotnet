@@ -1,0 +1,34 @@
+﻿name: bump-version
+author: SLAVONchick
+description: bump-version
+inputs: 
+  version_file:
+    required: true
+    description: Path to a version file
+  version_mask:
+    required: true
+    description: Version mask tells which version number to bump. Format is '*.*.*.*'
+runs:
+  using: composite
+  steps:
+    - name: Parse Version And Bump It
+      id: parse-version
+      shell: pwsh
+      run: |
+        $version = ( `
+          Select-Xml -Path ${{ inputs.version_file }} -XPath '//Version' | `
+          Select-Object -ExpandProperty Node).InnerText
+        $versions = $version.Split('.')
+        $versionMasks = "${{ inputs.version_mask }}".Split('.')
+        $newVersion = "$([int]$versions[0] + [int]$versionMasks[0]).$([int]$versions[1] + [int]$versionMasks[1]).$([int]$versions[2] + [int]$versionMasks[2]).$([int]$versions[3] + [int]$versionMasks[3])"
+        Set-Content -Path ${{ inputs.version_file }} -Value "<Version>$newVersion</Version>"
+        Add-Content -Path "$env:GITHUB_OUTPUT" -Value "old-version=$version"
+        Add-Content -Path "$env:GITHUB_OUTPUT" -Value "new-version=$newVersion"
+    - name: Push New Version
+      shell: pwsh
+      run: |
+        git config --global user.name 'version bump'
+        git config --global user.email 'version-bump@users.noreply.github.com'
+        git add ${{ inputs.version_file }}
+        git commit -m "Automatic version bump (${{ steps.parse-version.outputs.old-version }} -> ${{ steps.parse-version.outputs.new-version }})"
+        git push

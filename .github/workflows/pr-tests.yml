@@ -1,8 +1,12 @@
-﻿name: PR Tests
+﻿name: Build & Test
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: 
+      - master
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -17,9 +21,11 @@ jobs:
           dotnet-version: 9.0.x
       - name: .NET Tool Restore
         run: dotnet tool restore
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage
+      # just pass anything to parameters, since the build output won't be released
+      - name: Build & Test
+        uses: ./.github/actions/build-n-test
+        with:
+          library_version: 0.0.0.1
+          version_suffix: ""
+          configuration: Debug
+          gist_key: ${{ secrets.GH_GIST_API_KEY }}

@@ -1,0 +1,68 @@
+﻿name: build-n-test
+author: SLAVONchick
+description: build-n-test
+inputs: 
+  library_version:
+    required: true
+    description: Version to build the project with
+  configuration:
+    required: true
+    description: Tells what configuration should be used to build the project
+  version_suffix:
+    required: false
+    description: Suffix to put after a version. If set, the build output is considered pre-release
+  gist_key:
+    required: true
+    description: GitHub GIST API-key
+
+runs:
+  using: composite
+  steps:
+    - name: Restore dependencies
+      shell: bash
+      run: dotnet restore
+    - name: Build
+      shell: bash
+      run: dotnet build --no-restore /p:VersionPrefix=${{ inputs.library_version }}  /p:VersionSuffix=${{ inputs.version_suffix }} -c ${{ inputs.configuration }}
+    - name: Test
+      shell: bash
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage -c ${{ inputs.configuration }}
+    - name: Code Coverage Summary
+      id: code-coverage-summary
+      shell: pwsh
+      run: |
+        $lr = [System.Math]::Round( `
+          $(Select-Xml -Path ./coverage/*/coverage.cobertura.xml -XPath "//package" ` 
+            | Select-Object -ExpandProperty Node `
+            | Select-Object -Property line-rate)."line-rate", 2) * 100
+        $codeCoverageBadgeData = @{ 
+          files = @{ 
+            "temp-mail-dotnet-code-coverage.json" = @{
+              content = $(@{
+                schemaVersion = 1;
+                label = "Code Coverage";
+                message = $lr.ToString();
+                color = (&{if ($lr -ge 80) {"green"} else { if ($lr -ge 50) {"yellow"} else {"orange"} } })
+              } | ConvertTo-Json)
+            }
+          } 
+        } | ConvertTo-Json -Compress
+        Add-Content -Path "$env:GITHUB_OUTPUT" -Value "code-coverage-badge-data=$codeCoverageBadgeData"
+    - name: Create Code Coverage Badge
+      shell: pwsh
+      run: |
+        $response = Invoke-WebRequest `
+        -Method Patch `
+        -Headers @{
+          "Accept" = "application/vnd.github+json";
+          "Authorization" = "Bearer ${{ inputs.gist_key }}";
+          "X-GitHub-Api-Version" = "2022-11-28"
+        } `
+        -Body '${{ steps.code-coverage-summary.outputs.code-coverage-badge-data }}' `
+        -Uri "https://api.github.com/gists/89c85cdd66cced45519b7928f2740687" `
+        -ErrorAction Ignore
+        
+        if ($response.StatusCode -ne 200) {
+          Write-Output $response.Content
+          exit 1
+        }
