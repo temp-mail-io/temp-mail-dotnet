@@ -4,15 +4,16 @@
 name: .NET Release
 
 on:
-  workflow_call: 
+  workflow_dispatch: 
     inputs:
       pre_release:
         required: true
         type: boolean
-        default: true
         description: Determines if the workflow should be run in pre release mode
-
-
+      version_mask:
+        required: true
+        type: string
+        description: Version mask - four digits separated by '.'. Each digit tells which number and by how much to bump in version
 
 jobs:
   build:
@@ -30,19 +31,15 @@ jobs:
       - name: Set Input Parameters
         run: |
           VERSION_SUFFIX=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "rc"; else echo ""; fi)
-          VERSION_MASK=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "0.0.0.1"; else echo "0.0.1.0"; fi)          
           CONFIGURATION=$(if [ "${{ inputs.pre_release }}" == "true" ]; then echo "Debug"; else echo "Release"; fi)
           echo "CONFIGURATION=$CONFIGURATION"
           echo "CONFIGURATION=$CONFIGURATION" >> $GITHUB_ENV
-          echo "VERSION_MASK=$VERSION_MASK"
-          echo "VERSION_MASK=$VERSION_MASK" >> $GITHUB_ENV
           echo "VERSION_SUFFIX=$VERSION_SUFFIX"
           echo "VERSION_SUFFIX=$VERSION_SUFFIX" >> $GITHUB_ENV
       - name: Version Bump
-        uses: SiqiLu/dotnet-bump-version@2.0.0
+        uses: ./.github/actions/bump-version
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          version_mask: ${{ env.VERSION_MASK }}
+          version_mask: ${{ inputs.version_mask }}
           version_files: "version.xml"
       - name: Set Version Env Var
         run: |
@@ -52,45 +49,12 @@ jobs:
           echo "LIBRARY_VERSION=$LIBRARY_VERSION" >> $GITHUB_ENV
           echo "FULL_LIBRARY_VERSION=$FULL_LIBRARY_VERSION" >> $GITHUB_ENV
           echo "LIBRARY_TAG=$LIBRARY_TAG" >> $GITHUB_ENV
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --no-restore /p:VersionPrefix=${{ env.LIBRARY_VERSION }}  /p:VersionSuffix=${{ env.VERSION_SUFFIX }} -c ${{ env.CONFIGURATION }} 
-      - name: Test
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ./tests/TempMail.Client.Tests/coverlet.runsettings --results-directory ./coverage -c ${{ env.CONFIGURATION }}
-      - name: Code Coverage Summary
-        run: |
-          dotnet pwsh -c \
-          '
-            $lr = [System.Math]::Round( `
-              $( `
-                Select-Xml -Path ./coverage/*/coverage.cobertura.xml -XPath "//package" ` 
-                | Select-Object -ExpandProperty Node `
-                | Select-Object -Property line-rate)."line-rate", 2 `
-              ) * 100;
-            @{ 
-              files = @{ 
-                "temp-mail-dotnet-code-coverage.json" = @{
-                  content = $(@{
-                    schemaVersion = 1;
-                    label = "Code Coverage";
-                    message = $lr.ToString();
-                    color = (&{if ($lr -ge 80) {"green"} else { if ($lr -ge 50) {"yellow"} else {"orange"} } })
-                  } | ConvertTo-Json)
-                }
-              } 
-            } | ConvertTo-Json' > code-coverage-badge.json
-      - name: Create Awesome Badge
-        run: |
-          data=$(cat code-coverage-badge.json)
-          echo "$data"
-          curl -L \
-          -X PATCH \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GH_GIST_API_KEY }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          "https://api.github.com/gists/89c85cdd66cced45519b7928f2740687" \
-          -d "$data"
+      - name: Build & Test
+        uses: ./.github/actions/build-n-test
+        with:
+          library_version: ${{ env.LIBRARY_VERSION }}
+          version_suffix: ${{ env.VERSION_SUFFIX }}
+          configuration: ${{ env.CONFIGURATION }}
       - name: Publish NuGet Packages
         run: |
           mkdir ./package
