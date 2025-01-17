@@ -3,15 +3,19 @@
 The official client for https://temp-mail.io.
 
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SLAVONchick/89c85cdd66cced45519b7928f2740687/raw/temp-mail-dotnet-code-coverage.json)
-[![NuGet Version](https://img.shields.io/nuget/v/TempMail.Client?style=flat&color=blue)](https://www.nuget.org/packages/TempMail.Client/)
-[![NuGet Version](https://img.shields.io/nuget/vpre/TempMail.Client?style=flat&color=orange)](https://www.nuget.org/packages/TempMail.Client)
+[![Build & Test](https://github.com/temp-mail-io/temp-mail-dotnet/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/temp-mail-io/temp-mail-dotnet/actions/workflows/pr-tests.yml)
+[![NuGet Package](https://img.shields.io/nuget/v/TempMail.Client?style=flat&color=blue)](https://www.nuget.org/packages/TempMail.Client/)
+[![NuGet PreRelease](https://img.shields.io/nuget/vpre/TempMail.Client?style=flat&color=orange)](https://www.nuget.org/packages/TempMail.Client)
+[![TempMail.Client on fuget.org](https://www.fuget.org/packages/TempMail.Client/badge.svg)](https://www.fuget.org/packages/TempMail.Client)
 
 
 `TempMail.Client` is an easy-to-use client for https://temp-mail.io based on `HttpClient`.
 
 # Installation
 
-``$> dotnet add package TempMail.Client``
+```shell
+    dotnet add package TempMail.Client
+```
 
 
 # Usage
@@ -230,8 +234,12 @@ if (definitlyErrorResponse is { IsSuccess: false, ErrorResult: {} error })
 ```
 
 # TempMail.Client.AspNetCore
-[![NuGet Version](https://img.shields.io/nuget/v/TempMail.Client.AspNetCore?style=flat&color=blue)](https://www.nuget.org/packages/TempMail.Client.AspNetCore/)
-[![NuGet Version](https://img.shields.io/nuget/vpre/TempMail.Client.AspNetCore?style=flat&color=orange)](https://www.nuget.org/packages/TempMail.Client.AspNetCore)
+
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SLAVONchick/89c85cdd66cced45519b7928f2740687/raw/temp-mail-dotnet-code-coverage.json)
+[![Build & Test](https://github.com/temp-mail-io/temp-mail-dotnet/actions/workflows/pr-tests.yml/badge.svg)](https://github.com/temp-mail-io/temp-mail-dotnet/actions/workflows/pr-tests.yml)
+[![NuGet Package](https://img.shields.io/nuget/v/TempMail.Client.AspNetCore?style=flat&color=blue)](https://www.nuget.org/packages/TempMail.Client.AspNetCore/)
+[![NuGet PreRelease](https://img.shields.io/nuget/vpre/TempMail.Client.AspNetCore?style=flat&color=orange)](https://www.nuget.org/packages/TempMail.Client.AspNetCore)
+[![TempMail.Client.AspNetCore on fuget.org](https://www.fuget.org/packages/TempMail.Client.AspNetCore/badge.svg)](https://www.fuget.org/packages/TempMail.Client.AspNetCore)
 
 ### Add `TempMailClient` to ASP.NET DI container
 
