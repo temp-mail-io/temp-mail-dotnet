@@ -20,7 +20,21 @@ runs:
           Select-Object -ExpandProperty Node).InnerText
         $versions = $version.Split('.')
         $versionMasks = "${{ inputs.version_mask }}".Split('.')
-        $newVersion = "$([int]$versions[0] + [int]$versionMasks[0]).$([int]$versions[1] + [int]$versionMasks[1]).$([int]$versions[2] + [int]$versionMasks[2]).$([int]$versions[3] + [int]$versionMasks[3])"
+        $bumped = $false
+        for ($i = 0; $i -le 3; $i++) {
+          if ($bumped) {
+            $versions[$i] = "0"
+            continue
+          }
+          $v = [int]$version[$i]
+          $vm = [int]$versionMasks[$i]
+          if ($vm -gt 0) {
+            $v = $v + $vm
+            $bumped = $true
+          }
+          $versions[$i] = [string]$v
+        }
+        $newVersion = [System.String]::Join('.', $versions)
         Set-Content -Path ${{ inputs.version_file }} -Value "<Version>$newVersion</Version>"
         Add-Content -Path "$env:GITHUB_OUTPUT" -Value "old-version=$version"
         Add-Content -Path "$env:GITHUB_OUTPUT" -Value "new-version=$newVersion"
