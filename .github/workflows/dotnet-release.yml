@@ -9,7 +9,7 @@ on:
       pre_release:
         required: true
         type: boolean
-        description: Determines if the workflow should be run in pre release mode
+        description: Pre-Release - determines if the workflow should be run in pre release mode
       version_mask:
         required: true
         type: string
@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/bump-version
         with:
           version_mask: ${{ inputs.version_mask }}
-          version_files: "version.xml"
+          version_file: "version.xml"
       - name: Set Version Env Var
         shell: pwsh
         run: |
