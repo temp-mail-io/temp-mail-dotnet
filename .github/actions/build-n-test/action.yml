@@ -11,6 +11,9 @@ inputs:
   version_suffix:
     required: false
     description: Suffix to put after a version. If set, the build output is considered pre-release
+  gist_key:
+    required: true
+    description: GitHub GIST API-key
 
 runs:
   using: composite
@@ -52,7 +55,7 @@ runs:
         -Method Patch `
         -Headers @{
           "Accept" = "application/vnd.github+json";
-          "Authorization" = "Bearer ${{ secrets.GH_GIST_API_KEY }}";
+          "Authorization" = "Bearer ${{ inputs.gist_key }}";
           "X-GitHub-Api-Version" = "2022-11-28"
         } `
         -Body "${{ steps.code-coverage-summary.outputs.code-coverage-badge-data }}" `

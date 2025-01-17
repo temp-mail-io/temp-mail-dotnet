@@ -28,3 +28,4 @@ jobs:
           library_version: 0.0.0.1
           version_suffix: ""
           configuration: Debug
+          gist_key: ${{ secrets.GH_GIST_API_KEY }}
