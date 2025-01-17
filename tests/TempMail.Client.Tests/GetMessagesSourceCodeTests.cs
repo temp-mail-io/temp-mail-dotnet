@@ -25,7 +25,7 @@ public class GetMessagesSourceCodeTests
             Guid.NewGuid().ToString(),
             Email.Result.Email,
             "someone@somewhere.com",
-            string.Empty,
+            [],
             string.Empty,
             "body",
             "<div>body</div>",

@@ -18,7 +18,7 @@ public class Message(
     string id,
     string from,
     string to,
-    string cc,
+    string[] cc,
     string subject,
     string bodyText,
     string bodyHtml,
@@ -43,7 +43,7 @@ public class Message(
     /// <summary>
     /// "Carbon copy", additional recipients e-mails
     /// </summary>
-    public string Cc { get; } = cc;
+    public string[] Cc { get; } = cc;
 
     /// <summary>
     /// E-mail message subject

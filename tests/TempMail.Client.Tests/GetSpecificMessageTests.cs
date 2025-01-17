@@ -24,7 +24,7 @@ public class GetSpecificMessageTests
             Guid.NewGuid().ToString(),
             Email.Result.Email,
             "someone@somewhere.com",
-            string.Empty,
+            [],
             string.Empty,
             string.Empty,
             string.Empty,
