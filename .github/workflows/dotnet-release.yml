@@ -60,6 +60,7 @@ jobs:
           library_version: ${{ env.LIBRARY_VERSION }}
           version_suffix: ${{ env.VERSION_SUFFIX }}
           configuration: ${{ env.CONFIGURATION }}
+          gist_key: ${{ secrets.GH_GIST_API_KEY }}
       - name: Publish NuGet Packages
         run: |
           mkdir ./package
