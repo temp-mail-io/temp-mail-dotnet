@@ -26,7 +26,7 @@ runs:
             $versions[$i] = "0"
             continue
           }
-          $v = [int]$version[$i]
+          $v = [int]$versions[$i]
           $vm = [int]$versionMasks[$i]
           if ($vm -gt 0) {
             $v = $v + $vm
