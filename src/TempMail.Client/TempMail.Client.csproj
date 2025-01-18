@@ -16,6 +16,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
