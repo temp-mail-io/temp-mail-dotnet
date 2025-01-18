@@ -1,4 +1,6 @@
-﻿namespace TempMail.Client.Responses;
+﻿using TempMail.Client.Exceptions;
+
+namespace TempMail.Client.Responses;
 
 /// <summary>
 /// Representation of any of the <a href="https://temp-mail.io">temp-mail</a> response
@@ -26,6 +28,10 @@ public class Response<TSuccess>
     /// </summary>
     public ErrorResponse? ErrorResult { get; internal set; }
 
+    /// <summary>
+    /// Throw <see cref="TempMailClientException"/> if <see cref="IsSuccess"/> is <c>false</c>
+    /// </summary>
+    /// <exception cref="TempMailClientException"></exception>
     public void ThrowIfError()
     {
         if (!IsSuccess)
@@ -35,14 +41,29 @@ public class Response<TSuccess>
     }
 }
 
+/// <summary>
+/// Contains method for <see cref="Response{TSuccess}"/> instance creation
+/// </summary>
 public static class Response
 {
+    /// <summary>
+    /// Create an instance of <see cref="Response{TSuccess}"/> with <see cref="Response{TSuccess}.IsSuccess"/> is <c>true</c>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="result"></param>
+    /// <returns>Instance of <see cref="Response{TSuccess}"/></returns>
     public static Response<T> Success<T>(T result) => new()
     {
         IsSuccess = true,
         Result = result
     };
 
+    /// <summary>
+    /// Create an instance of <see cref="Response{TSuccess}"/> with <see cref="Response{TSuccess}.IsSuccess"/> is <c>false</c>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="errorResult"></param>
+    /// <returns></returns>
     public static Response<T> Error<T>(ErrorResponse? errorResult) => new()
     {
         IsSuccess = false,

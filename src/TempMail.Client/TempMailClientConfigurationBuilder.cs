@@ -16,6 +16,9 @@ public class TempMailClientConfigurationBuilder
     }
     private readonly TempMailClientConfiguration configuration = null!;
 
+    /// <summary>
+    /// Create an instance of <see cref="TempMailClientConfigurationBuilder"/>
+    /// </summary>
     public static TempMailClientConfigurationBuilder Create()
     {
         return new TempMailClientConfigurationBuilder(new TempMailClientConfiguration());

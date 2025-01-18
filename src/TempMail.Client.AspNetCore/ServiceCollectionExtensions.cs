@@ -2,6 +2,9 @@
 
 namespace TempMail.Client.AspNetCore;
 
+/// <summary>
+/// Contains helper methods for registering <see cref="TempMailClient"/>
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>

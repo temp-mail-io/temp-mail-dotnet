@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
+using TempMail.Client.Exceptions;
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 using TempMail.Client.Responses;
@@ -95,7 +96,7 @@ public class TempMailClient : ITempMailClient
                 using var ms = new MemoryStream(bytes);
                 errorResponseContentStream.Seek(0L, SeekOrigin.Begin);
                 await errorResponseContentStream.CopyToAsync(ms, ct);
-                throw new TempMailClientException(bytes);
+                throw new TempMailClientUnexpectedResponseException(bytes);
             }
 
             return Response.Error<TResponse>(errorResponseContent);

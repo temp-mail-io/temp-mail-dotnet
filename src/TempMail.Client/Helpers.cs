@@ -5,7 +5,7 @@ using TempMail.Client.Models;
 
 namespace TempMail.Client;
 
-public abstract class Helpers
+internal static class Helpers
 {
     internal static readonly Regex EmailRegex = new(
         @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*@((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))\z",
