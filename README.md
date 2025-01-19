@@ -14,7 +14,7 @@ The official client for https://temp-mail.io.
 # Installation
 
 ```shell
-    dotnet add package TempMail.Client
+dotnet add package TempMail.Client
 ```
 
 

@@ -9,7 +9,7 @@ using TempMail.Client.Responses;
 namespace TempMail.Client;
 
 /// <summary>
-/// A <a href="https://temp-mail.io">temp-mail</a> client 
+/// A <a href="https://temp-mail.io">temp-mail</a> client contract
 /// </summary>
 public interface ITempMailClient : IDisposable
 {

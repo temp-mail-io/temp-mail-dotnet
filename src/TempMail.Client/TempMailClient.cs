@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
+using TempMail.Client.Exceptions;
 using TempMail.Client.Models;
 using TempMail.Client.Requests;
 using TempMail.Client.Responses;
@@ -95,7 +96,7 @@ public class TempMailClient : ITempMailClient
                 using var ms = new MemoryStream(bytes);
                 errorResponseContentStream.Seek(0L, SeekOrigin.Begin);
                 await errorResponseContentStream.CopyToAsync(ms, ct);
-                throw new TempMailClientException(bytes);
+                throw new TempMailClientUnexpectedResponseException(bytes);
             }
 
             return Response.Error<TResponse>(errorResponseContent);
@@ -163,53 +164,64 @@ public class TempMailClient : ITempMailClient
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public Task<Response<CreateEmailResponse>> CreateEmail(
         CreateEmailRequest request,
         CancellationToken ct = default) =>
         SendRequest<CreateEmailRequest, CreateEmailResponse>(request, "/v1/emails", HttpMethod.Post, ct);
 
+    /// <inheritdoc/>
     public Task<Response<GetAllMessagesResponse>> GetAllMessages(
         GetAllMessagesRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<GetAllMessagesResponse>($"/v1/emails/{request.Email}/messages", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public Task<Response<EmptyResponse>> DeleteEmail(
         DeleteEmailRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<EmptyResponse>($"/v1/emails/{request.Email}", HttpMethod.Delete, ct);
 
+    /// <inheritdoc/>
     public Task<Response<Message>> GetSpecificMessage(
         GetSpecificMessageRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<Message>($"/v1/messages/{request.Id}", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public Task<Response<EmptyResponse>> DeleteSpecificMessage(
         DeleteSpecificMessageRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<EmptyResponse>($"/v1/messages/{request.Id}", HttpMethod.Delete, ct);
 
+    /// <inheritdoc/>
     public Task<Response<string>> GetMessageSourceCode(
         GetMessageSourceCodeRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<string>($"/v1/messages/{request.Id}/source_code", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public Task<Response<byte[]>> GetAttachment(
         GetAttachmentRequest request,
         CancellationToken ct = default) =>
         SendRequestNoContent<byte[]>($"/v1/attachments/{request.Id}", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public Task<Response<GetAvailableDomainsResponse>> GetAvailableDomains(
         CancellationToken ct = default) =>
         SendRequestNoContent<GetAvailableDomainsResponse>($"/v1/domains", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public Task<Response<RateLimitStatus>> GetRateLimitStatus(
         CancellationToken ct = default) =>
         SendRequestNoContent<RateLimitStatus>($"/v1/rate_limit", HttpMethod.Get, ct);
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (disposeHttpClient)
         {
+            GC.SuppressFinalize(httpClient);
             httpClient.Dispose();
         }
     }
