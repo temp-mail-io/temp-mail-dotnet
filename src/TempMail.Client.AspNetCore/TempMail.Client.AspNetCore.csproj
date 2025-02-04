@@ -1,23 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
-        <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <LangVersion>latest</LangVersion>
+      <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
     </PropertyGroup>
     
     <PropertyGroup>
-        <PackageId>TempMail.Client.AspNetCore</PackageId>
-        <Description>A light-weight client for https://temp-mail.io</Description>
-        <Authors>Viacheslav Koryagin</Authors>
-        <RepositoryUrl>https://github.com/temp-mail-io/temp-mail-dotnet</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile> 
+      <PackageId>TempMail.Client.AspNetCore</PackageId>
+      <Description>A light-weight client for https://temp-mail.io</Description>
+      <Authors>Viacheslav Koryagin</Authors>
+      <RepositoryUrl>https://github.com/temp-mail-io/temp-mail-dotnet</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PublishRepositoryUrl>true</PublishRepositoryUrl>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+      <PackageIcon>icon.png</PackageIcon>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+      <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+      <GenerateDocumentationFile>True</GenerateDocumentationFile>
+      <PackageTags>temp-mail;temp;mail;tmp;email;temporary;temp-mail.io;api;sdk;client;contract</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,7 +34,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+      <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+      <None Include="..\..\LICENSE.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
