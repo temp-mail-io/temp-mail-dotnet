@@ -17,7 +17,7 @@
       <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
       <PackageIcon>icon.png</PackageIcon>
       <PackageReadmeFile>README.md</PackageReadmeFile>
-      <PackageReadmeFile>LICENSE.md</PackageReadmeFile>
+      <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
       <GenerateDocumentationFile>True</GenerateDocumentationFile>
       <PackageTags>temp-mail;temp;mail;tmp;email;temporary;temp-mail.io;api;sdk;client;contract</PackageTags>
     </PropertyGroup>
